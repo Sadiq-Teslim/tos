@@ -6,6 +6,8 @@
     --dark-blue-bg: #002d56;
     --text-color: #333;
     --white-color: #ffffff;
+    --success-color: #28a745;
+    --error-color: #dc3545;
 }
 
 
@@ -28,6 +30,10 @@ body {
     background-color: var(--white-color);
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 .container {
     width: 90%;
     max-width: 1100px;
@@ -43,6 +49,10 @@ body {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+.hidden {
+    display: none;
 }
 
 
@@ -97,6 +107,8 @@ body {
     text-decoration: none;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    border: none;
+    cursor: pointer;
 }
 
 .cta-button:hover {
@@ -116,45 +128,64 @@ body {
     text-align: center;
     color: var(--white-color);
     overflow: hidden;
-    background: linear-gradient( 135deg, var(--primary-blue), var(--accent-teal), var(--dark-blue-bg));
-    background-size: 400% 400%;
-    animation: gradient-animation 15s ease infinite;
 }
 
-@keyframes gradient-animation {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+.hero-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.hero-background-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 74, 143, 0.8), rgba(31, 179, 168, 0.7));
 }
 
 .hero-content {
+    position: relative;
     z-index: 2;
     padding: 0 1rem;
-}
-
-.hero-title {
-    font-size: 4.5rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
     animation: fadeInDown 1s ease-out forwards;
 }
 
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
 .hero-subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeInUp 1s ease-out 0.5s forwards;
+    font-size: 1.2rem;
+    margin: 1rem auto 2.5rem;
+    max-width: 600px;
+    opacity: 0.9;
 }
 
 .hero-cta {
-    opacity: 0;
-    animation: fadeInUp 1s ease-out 1s forwards;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 @keyframes fadeInDown {
@@ -168,19 +199,8 @@ body {
     }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-
-/* --- General Section Styling --- */
+/* --- All Other Sections (Styles mostly unchanged) --- */
 
 section {
     padding: 5rem 0;
@@ -204,9 +224,6 @@ h2::after {
     margin: 0.5rem auto 0;
 }
 
-
-/* --- About Us Section --- */
-
 .about-section {
     background-color: #f8f9fa;
 }
@@ -228,9 +245,6 @@ h2::after {
     margin-top: 2rem;
     color: #555;
 }
-
-
-/* --- Mission Section --- */
 
 .mission-section {
     background-color: var(--dark-blue-bg);
@@ -300,7 +314,7 @@ h2::after {
 }
 
 
-/* --- Form Section --- */
+/* --- Form Section & Button States --- */
 
 .form-section {
     background-color: #f8f9fa;
@@ -352,38 +366,45 @@ h2::after {
 }
 
 .form-submit-btn {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     padding: 1rem;
     font-size: 1.1rem;
-    border: none;
-    cursor: pointer;
 }
 
-#form-status {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 600;
+.form-submit-btn .btn-spinner {
     display: none;
-    /* Hidden by default */
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--white-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-#form-status.success {
-    background-color: #d4edda;
-    color: #155724;
+.form-submit-btn.submitting .btn-text {
+    display: none;
+}
+
+.form-submit-btn.submitting .btn-spinner {
     display: block;
 }
 
-#form-status.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    display: block;
+.form-submit-btn.submitting {
+    pointer-events: none;
+    background-color: #1aa096;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
-/* --- Final CTA Section --- */
+/* --- Final CTA & Footer (Styles unchanged) --- */
 
 .cta-cards-container {
     display: grid;
@@ -430,9 +451,6 @@ h2::after {
     color: var(--white-color);
 }
 
-
-/* --- Footer --- */
-
 .main-footer {
     background-color: var(--primary-blue);
     color: #a7c4e1;
@@ -460,7 +478,7 @@ h2::after {
 }
 
 
-/* --- Mobile Navigation & Hamburger Menu --- */
+/* --- Mobile Navigation --- */
 
 .mobile-nav-toggle {
     display: none;
@@ -512,25 +530,73 @@ body.nav-open .icon-hamburger::after {
 }
 
 
-/* ========================================= */
+/* --- Modal Styling --- */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: var(--white-color);
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) .modal-box {
+    transform: scale(1);
+}
+
+#modal-icon svg {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+#modal-title {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+#modal-message {
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+#modal-close-btn {
+    width: 100%;
+}
 
 
-/* ---        RESPONSIVE STYLES        --- */
-
-
-/* ========================================= */
-
-
-/* Tablets and smaller desktops */
+/* --- Responsive Styles --- */
 
 @media (max-width: 992px) {
     .about-text {
         grid-template-columns: 1fr;
     }
 }
-
-
-/* General Mobile Styles */
 
 @media (max-width: 768px) {
     .nav-links {
@@ -558,10 +624,10 @@ body.nav-open .icon-hamburger::after {
         display: block;
     }
     .hero-section {
-        height: 70vh;
+        height: 80vh;
     }
     .hero-title {
-        font-size: 3rem;
+        font-size: 2.8rem;
     }
     h2 {
         font-size: 2rem;
@@ -579,9 +645,6 @@ body.nav-open .icon-hamburger::after {
         text-align: center;
     }
 }
-
-
-/* Smaller mobile devices */
 
 @media (max-width: 480px) {
     .hero-title {
