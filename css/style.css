@@ -337,25 +337,43 @@ h2::after {
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    position: relative;
+    /* Crucial for label positioning */
+    margin-bottom: 2rem;
+    /* Add more space for the floating label */
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--primary-blue);
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #999;
+    pointer-events: none;
+    /* Allows clicks to go through to the input */
+    transition: all 0.2s ease;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 1.2rem 1rem 0.6rem;
+    /* Adjust padding for the label */
     border-radius: 8px;
     border: 1px solid #ccc;
     font-family: "Poppins", sans-serif;
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus+label,
+.form-group textarea:focus+label,
+.form-group input:not(:placeholder-shown)+label,
+.form-group textarea:not(:placeholder-shown)+label {
+    top: 0.4rem;
+    left: 1rem;
+    font-size: 0.75rem;
+    color: var(--primary-blue);
+    font-weight: 600;
 }
 
 .form-group input:focus,
@@ -401,6 +419,33 @@ h2::after {
     to {
         transform: rotate(360deg);
     }
+}
+
+
+/* --- Live Validation Styles --- */
+
+.form-group input.valid,
+.form-group textarea.valid {
+    border-color: var(--success-color);
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid {
+    border-color: var(--error-color);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    box-shadow: 0 0 0 3px rgba(31, 179, 168, 0.2);
+    /* Keep the focus shadow consistent */
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: none;
+    /* Hidden by default */
 }
 
 

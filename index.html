@@ -93,9 +93,22 @@
                 <h2>Have an Idea?</h2>
                 <p class="form-intro">We want to hear from you. Share your thoughts, projects, or innovations below, and let's build the future together.</p>
                 <form id="idea-form" action="https://formspree.io/f/mnngqdng" method="POST">
-                    <div class="form-group"><label for="name">Your Name</label><input type="text" id="name" name="name" placeholder="Enter your full name" required></div>
-                    <div class="form-group"><label for="email">Your Email</label><input type="email" id="email" name="email" placeholder="Enter your email address" required></div>
-                    <div class="form-group"><label for="idea">Your Idea / Message</label><textarea id="idea" name="idea" rows="6" placeholder="Describe your idea in detail..." required></textarea></div>
+                    <!-- Inside the form section -->
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder=" " required>
+                        <label for="name">Your Name</label>
+                        <span class="error-message">Name is required.</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Your Email</label>
+                        <span class="error-message">Please enter a valid email address.</span>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea>
+                        <label for="idea">Your Idea / Message</label>
+                        <span class="error-message">Message is required.</span>
+                    </div>
                     <button type="submit" class="cta-button form-submit-btn">
                         <span class="btn-text">Submit Idea</span>
                         <span class="btn-spinner"></span>
