@@ -9,25 +9,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="images/favicon.ico" sizes="any">
-    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="manifest" href="images/site.webmanifest">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
     <header class="main-header">
         <div class="container">
             <nav class="main-nav">
-                <a href="#" class="logo">
-                    <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo">
-                </a>
+                <a href="index.html" class="logo"><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"></a>
                 <ul class="nav-links">
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#mission">What We Do</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="founder.html">Our Founder</a></li>
+                    <li><a href="index.html#contact">Contact Us</a></li>
                 </ul>
-                <a href="#share-idea" class="cta-button nav-cta">Share Your Idea</a>
+                <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
                 <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="nav-links" aria-expanded="false">
                     <span class="sr-only">Menu</span>
                     <span class="icon-hamburger"></span>
@@ -37,46 +34,34 @@
     </header>
 
     <main>
-        <!-- in index.html -->
-
         <section class="hero-section">
             <div class="hero-background-image"></div>
             <div class="hero-content">
-                <!-- 1. Logo -->
-                <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo" class="hero-logo">
-
-                <!-- 2. Tagline -->
-                <p class="hero-tagline">built for builders</p>
-
-                <!-- 3. Name -->
+                <div class="hero-logo-card">
+                    <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo" class="hero-logo">
+                    <p class="hero-tagline">built for builders</p>
+                </div>
                 <h1 class="hero-title">The Other Side</h1>
-
-                <!-- 4. Description -->
                 <p class="hero-subtitle">Empowering Africa's next wave of innovators, creators, and technologists to build the future.</p>
-
-                <!-- 5. Button -->
                 <a href="#share-idea" class="cta-button hero-cta">Share Your Idea</a>
             </div>
         </section>
 
-        <!-- All other sections (About, Mission) remain the same -->
         <section id="about" class="about-section">
-            <!-- Content as before -->
             <div class="container">
                 <div class="about-content-card">
                     <h2>About TOS Hub</h2>
                     <div class="about-text">
-                        <p>TOS Hub is a youth-powered innovation engine built to unlock Africa's next wave of creators, technologists, and entrepreneurs. Headquartered in Nigeria, we provide access to the tools that spark innovation — laptops, mobile devices,
-                            digital infrastructure, and global exposure.</p>
-                        <p>We are not simply handing out resources; we are building an ecosystem of growth, where every young innovator gains the visibility, mentorship, and networks to turn raw potential into scalable impact. TOS Hub shares in that growth,
-                            creating a model that reinvests success back into the community — ensuring the cycle of opportunity never stops.</p>
+                        <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria's Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where
+                            opportunity is accessible to all.</p>
+                        <p>Our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship, capital, and networks they need to succeed.</p>
+                        <a href="about.html" class="read-more-link">Learn More About Us &rarr;</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="mission" class="mission-section">
-            <!-- Content as before -->
             <div class="container">
                 <h2 class="light-text">Our Mission</h2>
                 <p class="mission-intro">Our mission is to catalyze Africa's transformation by equipping its youth with the power to invent, build, and lead in a digital-first world.</p>
@@ -97,7 +82,6 @@
                         <p>Ensuring Africa's brightest minds are pioneers in shaping the future.</p>
                     </div>
                 </div>
-                <p class="mission-outro">At TOS Hub, we believe Africa's greatest untapped resource is its youth. When given the right platform, they will not only redefine the continent's future — they will redefine the world's.</p>
             </div>
         </section>
 
@@ -105,33 +89,23 @@
             <div class="container">
                 <h2>Have an Idea?</h2>
                 <p class="form-intro">We want to hear from you. Share your thoughts, projects, or innovations below, and let's build the future together.</p>
-                <form id="idea-form" action="https://formspree.io/f/mnngqdng" method="POST">
-                    <!-- Inside the form section -->
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder=" " required>
-                        <label for="name">Your Name</label>
-                        <span class="error-message">Name is required.</span>
+                <form id="idea-form" action="https://formspree.io/f/mnngqdng" method="POST" enctype="multipart/form-data">
+                    <div class="form-group"><input type="text" id="name" name="name" placeholder=" " required><label for="name">Your Name</label><span class="error-message">Name is required.</span></div>
+                    <div class="form-group"><input type="email" id="email" name="email" placeholder=" " required><label for="email">Your Email</label><span class="error-message">Please enter a valid email address.</span></div>
+                    <div class="form-group"><textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea><label for="idea">Your Idea / Message</label><span class="error-message">Message is required.</span></div>
+
+                    <div class="form-actions">
+                        <label for="attachment" class="file-upload-label"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span>Attach a document (Optional)</span></label>
+                        <input type="file" id="attachment" name="attachment" class="file-upload-input">
+
+                        <button type="submit" class="cta-button form-submit-btn"><span class="btn-text">Submit Idea</span><span class="btn-spinner"></span></button>
                     </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder=" " required>
-                        <label for="email">Your Email</label>
-                        <span class="error-message">Please enter a valid email address.</span>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea>
-                        <label for="idea">Your Idea / Message</label>
-                        <span class="error-message">Message is required.</span>
-                    </div>
-                    <button type="submit" class="cta-button form-submit-btn">
-                        <span class="btn-text">Submit Idea</span>
-                        <span class="btn-spinner"></span>
-                    </button>
+                    <span id="file-name-display"></span>
                 </form>
             </div>
         </section>
 
         <section id="contact" class="final-cta-section">
-            <!-- Content as before -->
             <div class="container">
                 <h2>Become a Part of the Movement</h2>
                 <div class="cta-cards-container">
@@ -150,7 +124,6 @@
     </main>
 
     <footer class="main-footer">
-        <!-- Content as before -->
         <div class="container">
             <div class="footer-content">
                 <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
@@ -163,7 +136,6 @@
         </div>
     </footer>
 
-    <!-- ====== SUBMISSION RESULT MODAL ====== -->
     <div id="result-modal" class="modal-overlay hidden">
         <div class="modal-box">
             <div id="modal-icon"></div>
@@ -172,7 +144,6 @@
             <button id="modal-close-btn" class="cta-button">Continue</button>
         </div>
     </div>
-
     <script src="js/main.js"></script>
 </body>
 
