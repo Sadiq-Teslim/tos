@@ -42,7 +42,7 @@
                     <p class="hero-tagline">built for builders</p>
                 </div>
                 <h1 class="hero-title">The Other Side</h1>
-                <p class="hero-subtitle">Empowering Africa's next wave of innovators, creators, and technologists to build the future.</p>
+                <p class="hero-subtitle">Empowering Africa’s next wave of innovators, creators, and technologists to build the future.</p>
                 <a href="#share-idea" class="cta-button hero-cta">Share Your Idea</a>
             </div>
         </section>
@@ -52,7 +52,7 @@
                 <div class="about-content-card">
                     <h2>About TOS Hub</h2>
                     <div class="about-text">
-                        <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria's Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where
+                        <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria’s Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where
                             opportunity is accessible to all.</p>
                         <p>Our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship, capital, and networks they need to succeed.</p>
                         <a href="about.html" class="read-more-link">Learn More About Us &rarr;</a>
@@ -64,7 +64,7 @@
         <section id="mission" class="mission-section">
             <div class="container">
                 <h2 class="light-text">Our Mission</h2>
-                <p class="mission-intro">Our mission is to catalyze Africa's transformation by equipping its youth with the power to invent, build, and lead in a digital-first world.</p>
+                <p class="mission-intro">Our mission is to catalyze Africa’s transformation by equipping its youth with the power to invent, build, and lead in a digital-first world.</p>
                 <div class="mission-cards-container">
                     <div class="mission-card">
                         <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></div>
@@ -79,7 +79,7 @@
                     <div class="mission-card">
                         <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
                         <h3>Global Relevance</h3>
-                        <p>Ensuring Africa's brightest minds are pioneers in shaping the future.</p>
+                        <p>Ensuring Africa’s brightest minds are pioneers in shaping the future.</p>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,11 @@
             <div class="container">
                 <h2>Have an Idea?</h2>
                 <p class="form-intro">We want to hear from you. Share your thoughts, projects, or innovations below, and let's build the future together.</p>
-                <form id="idea-form" action="https://formspree.io/f/mnngqdng" method="POST" enctype="multipart/form-data">
+
+                <form id="idea-form" name="idea-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data">
+                    <input type="hidden" name="form-name" value="idea-submission" />
+                    <p class="hidden"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
+
                     <div class="form-group"><input type="text" id="name" name="name" placeholder=" " required><label for="name">Your Name</label><span class="error-message">Name is required.</span></div>
                     <div class="form-group"><input type="email" id="email" name="email" placeholder=" " required><label for="email">Your Email</label><span class="error-message">Please enter a valid email address.</span></div>
                     <div class="form-group"><textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea><label for="idea">Your Idea / Message</label><span class="error-message">Message is required.</span></div>
