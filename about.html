@@ -9,36 +9,57 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="images/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
     <header class="main-header">
-        <!-- Same Header -->
+        <div class="container">
+            <nav class="main-nav">
+                <a href="index.html" class="logo"><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"></a>
+                <ul class="nav-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="founder.html">Our Founder</a></li>
+                    <li><a href="index.html#contact">Contact Us</a></li>
+                </ul>
+                <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="nav-links" aria-expanded="false">
+                    <span class="sr-only">Menu</span>
+                    <span class="icon-hamburger"></span>
+                </button>
+            </nav>
+        </div>
     </header>
+
     <main>
         <section class="page-header">
             <div class="container">
                 <h1>About Us</h1>
-                <p class="page-subtitle">We don't just dream of change — we build it.</p>
+                <p class="page-subtitle">We don’t just dream of change — we build it.</p>
             </div>
         </section>
+
         <section class="content-section">
             <div class="container content-narrow">
-                <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria's Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where opportunity
+                <p class="intro-paragraph">At TOS Hub (The Other Side), we are building the foundation of Nigeria’s Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where opportunity
                     is accessible to all.</p>
                 <p>Nigeria is full of brilliant, resilient, and creative people. What often holds us back is not talent, but opportunity. At TOS Hub, our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship,
                     capital, and networks they need to succeed.</p>
             </div>
         </section>
+
         <section class="content-section bg-light">
             <div class="container">
                 <div class="split-section">
-                    <div class="split-item">
+                    <div class="info-card">
+                        <div class="info-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
                         <h3>Our Vision</h3>
-                        <p>To unlock Nigeria's immense potential by creating an ecosystem where entrepreneurs don't have to leave home to succeed — they can build world-class solutions right here.</p>
+                        <p>To unlock Nigeria’s immense potential by creating an ecosystem where entrepreneurs don’t have to leave home to succeed — they can build world-class solutions right here.</p>
                     </div>
-                    <div class="split-item">
+                    <div class="info-card">
+                        <div class="info-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-1-3 0-4.5 1.5L13 8 5 6l-1.8 1.8c.5 1.5.3 3.2-.8 4.7l-1 1.5 1.5 1 4.7-.8c1.5-.5 3.2-.3 4.7.8L16 11l1.8 1.8c-.5 1.5-.3 3.2.8 4.7l1.5 1-1-1.5-.8 4.7c-.5 1.5-2.2 1.7-3.7.8z"></path></svg></div>
                         <h3>Our Approach</h3>
                         <ul>
                             <li><strong>Incubate:</strong> Provide practical support to shape and test ideas.</li>
@@ -50,79 +71,51 @@
                 </div>
             </div>
         </section>
+
         <section class="content-section">
-            <div class="container content-narrow">
-                <h3>Why TOS Hub Matters</h3>
-                <ul>
-                    <li>Nigeria is Africa's largest, youngest market — full of opportunities in fintech, health, education, agriculture, and logistics.</li>
-                    <li>By bridging local innovators with diaspora professionals and global investors, we create a unique ecosystem others cannot replicate.</li>
-                    <li>We balance impact and return — building businesses that change lives and create sustainable economic value.</li>
-                </ul>
-                <p class="final-statement">At TOS Hub, we are shaping The Other Side of Nigeria — the side of innovation, resilience, and global relevance.</p>
+            <div class="container">
+                <div class="section-title-centered">
+                    <h2>Why TOS Hub Matters</h2>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Africa's Largest Market</h4>
+                        <p>Nigeria is the continent's largest, youngest market—full of opportunities in fintech, health, agriculture, and logistics.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Unique Ecosystem</h4>
+                        <p>By bridging local innovators with diaspora professionals and global investors, we create a unique support system others cannot replicate.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Impact & Return</h4>
+                        <p>We balance social impact and financial return — building businesses that change lives and create sustainable economic value.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-cta-section">
+            <div class="container">
+                <h2>Ready to Build the Future?</h2>
+                <p>Whether you're an innovator with an idea, a partner who shares our vision, or an investor looking for impact, we want to hear from you.</p>
+                <a href="index.html#share-idea" class="cta-button">Share Your Idea</a>
             </div>
         </section>
     </main>
+
     <footer class="main-footer">
-        <!-- Same Footer -->
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                    <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                </div>
+            </div>
+        </div>
     </footer>
     <script src="js/main.js"></script>
-</body>
-
-</html>
-<div class="container content-narrow">
-    <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria's Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where opportunity is accessible
-        to all.</p>
-    <p>Nigeria is full of brilliant, resilient, and creative people. What often holds us back is not talent, but opportunity. At TOS Hub, our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship, capital, and
-        networks they need to succeed.</p>
-</div>
-</section>
-
-<section class="content-section bg-light">
-    <div class="container">
-        <div class="split-section">
-            <div class="split-item">
-                <h3>Our Vision</h3>
-                <p>To unlock Nigeria's immense potential by creating an ecosystem where entrepreneurs don't have to leave home to succeed — they can build world-class solutions right here.</p>
-            </div>
-            <div class="split-item">
-                <h3>Our Approach</h3>
-                <ul>
-                    <li><strong>Incubate:</strong> Provide practical support to shape and test ideas.</li>
-                    <li><strong>Connect:</strong> Link founders with global networks and diaspora expertise.</li>
-                    <li><strong>Fund:</strong> Offer early-stage investment and access to capital.</li>
-                    <li><strong>Scale:</strong> Build companies with real traction, designed for growth.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content-section">
-    <div class="container content-narrow">
-        <h3>Why TOS Hub Matters</h3>
-        <ul>
-            <li>Nigeria is Africa's largest, youngest market — full of opportunities in fintech, health, education, agriculture, and logistics.</li>
-            <li>By bridging local innovators with diaspora professionals and global investors, we create a unique ecosystem others cannot replicate.</li>
-            <li>We balance impact and return — building businesses that change lives and create sustainable economic value.</li>
-        </ul>
-        <p class="final-statement">At TOS Hub, we are shaping The Other Side of Nigeria — the side of innovation, resilience, and global relevance.</p>
-    </div>
-</section>
-</main>
-
-<footer class="main-footer">
-    <div class="container">
-        <div class="footer-content">
-            <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
-            <div class="social-links">
-                <a href="#" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
-                <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-            </div>
-        </div>
-    </div>
-</footer>
-<script src="js/main.js"></script>
 </body>
 
 </html>
