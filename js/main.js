@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- AJAX Form Submission for Netlify ---
     if (form) {
         form.addEventListener("submit", async function(event) {
-            event.preventDefault(); // This is the most important line - it stops the 404 error.
+            event.preventDefault(); // Stop the default redirect.
 
             const isNameValid = validateField(nameInput),
                 isEmailValid = validateField(emailInput),
@@ -102,11 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
 
             try {
-                // Netlify's special way of handling AJAX submissions
+                // This is the CORRECT fetch request for Netlify with file uploads
                 const response = await fetch("/", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(data).toString(),
+                    body: data
                 });
 
                 if (response.ok) {
@@ -115,10 +114,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     [nameInput, emailInput, ideaInput].forEach(input => input.classList.remove('valid', 'invalid'));
                     showModal(true, "Success!", "Your idea has been sent. We'll be in touch soon!");
                 } else {
-                    showModal(false, "Submission Failed", "Something went wrong. Please check your details and try again.");
+                    // This will be triggered if Netlify returns an error (e.g., form not found)
+                    const errorText = await response.text();
+                    showModal(false, "Submission Failed", `Something went wrong on the server. Please try again. Error: ${response.statusText}`);
                 }
             } catch (error) {
-                showModal(false, "Error", "A network error occurred. Please try again later.");
+                // This will be triggered by network errors (e.g., no internet)
+                showModal(false, "Error", "A network error occurred. Please check your connection and try again.");
             }
         });
     }
