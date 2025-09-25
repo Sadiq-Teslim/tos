@@ -88,7 +88,9 @@
             <div class="container">
                 <h2>Have an Idea?</h2>
                 <p class="form-intro">We want to hear from you. Share your thoughts, projects, or innovations below, and let's build the future together.</p>
-                <form id="idea-form" action="https://formspree.io/f/YOUR_UNIQUE_CODE" method="POST" enctype="multipart/form-data">
+                <form id="idea-form" name="idea-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data">
+                    <input type="hidden" name="form-name" value="idea-submission" />
+                    <p class="hidden"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
                     <div class="form-group"><input type="text" id="name" name="name" placeholder=" " required><label for="name">Your Name</label><span class="error-message">Name is required.</span></div>
                     <div class="form-group"><input type="email" id="email" name="email" placeholder=" " required><label for="email">Your Email</label><span class="error-message">Please enter a valid email address.</span></div>
                     <div class="form-group"><textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea><label for="idea">Your Idea / Message</label><span class="error-message">Message is required.</span></div>

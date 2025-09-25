@@ -86,30 +86,14 @@ body.nav-open {
 }
 
 
-/* Sidebar hidden by default */
+/* Default Desktop Navigation */
 
 .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    /* hide off-screen to the right */
-    width: 70%;
-    height: 100vh;
-    background: var(--white-color);
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 4rem 2rem;
-    gap: 2rem;
-    transition: right 0.3s ease-in-out;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-}
-
-
-/* When nav is open */
-
-.nav-links.show {
-    right: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2.5rem;
 }
 
 .nav-links a {
@@ -154,7 +138,7 @@ body.nav-open {
 }
 
 
-/* Hide mobile toggle by default */
+/* Hide mobile toggle on desktop */
 
 .mobile-nav-toggle {
     display: none;
@@ -844,6 +828,7 @@ h2::after {
 /* Mobile & Sidebar Styles (up to 768px) */
 
 @media (max-width: 768px) {
+    /* Mobile sidebar styles */
     .nav-links {
         position: fixed;
         top: 0;
@@ -853,6 +838,7 @@ h2::after {
         max-width: 300px;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         padding: 5rem 2rem;
         gap: 2.5rem;
         background: rgba(255, 255, 255, 0.98);
@@ -861,17 +847,19 @@ h2::after {
         /* Hides the menu off-screen */
         transition: transform 350ms ease-out;
         z-index: 1001;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     }
     body.nav-open .nav-links {
         transform: translateX(0%);
         /* Slides the menu in */
     }
+    /* Hide desktop CTA button on mobile */
     .nav-cta {
         display: none;
     }
+    /* Show and style mobile menu toggle (hamburger) */
     .mobile-nav-toggle {
         display: block;
-        /* Show the hamburger on mobile */
         background: transparent;
         border: 0;
         cursor: pointer;
@@ -918,6 +906,7 @@ h2::after {
     body.nav-open .icon-hamburger::after {
         transform: translateY(-8px) rotate(-45deg);
     }
+    /* Other mobile layout adjustments */
     .hero-logo-card {
         padding: 1.5rem;
     }
@@ -938,18 +927,6 @@ h2::after {
         flex-direction: column;
         gap: 1.5rem;
         text-align: center;
-    }
-}
-
-
-/* Desktop Navigation Styles (769px and wider) */
-
-@media (min-width: 769px) {
-    .nav-links {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 2.5rem;
     }
 }
 
