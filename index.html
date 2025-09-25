@@ -52,9 +52,8 @@
                 <div class="about-content-card">
                     <h2>About TOS Hub</h2>
                     <div class="about-text">
-                        <p>At TOS Hub (The Other Side), we are building the foundation of Nigeria’s Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where
-                            opportunity is accessible to all.</p>
-                        <p>Our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship, capital, and networks they need to succeed.</p>
+                        <p>At TOS Hub, we are building the foundation of Nigeria’s Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where opportunity is accessible
+                            to all.</p>
                         <a href="about.html" class="read-more-link">Learn More About Us &rarr;</a>
                     </div>
                 </div>
@@ -89,19 +88,13 @@
             <div class="container">
                 <h2>Have an Idea?</h2>
                 <p class="form-intro">We want to hear from you. Share your thoughts, projects, or innovations below, and let's build the future together.</p>
-
-                <form id="idea-form" name="idea-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data">
-                    <input type="hidden" name="form-name" value="idea-submission" />
-                    <p class="hidden"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
-
+                <form id="idea-form" action="https://formspree.io/f/YOUR_UNIQUE_CODE" method="POST" enctype="multipart/form-data">
                     <div class="form-group"><input type="text" id="name" name="name" placeholder=" " required><label for="name">Your Name</label><span class="error-message">Name is required.</span></div>
                     <div class="form-group"><input type="email" id="email" name="email" placeholder=" " required><label for="email">Your Email</label><span class="error-message">Please enter a valid email address.</span></div>
                     <div class="form-group"><textarea id="idea" name="idea" rows="6" placeholder=" " required></textarea><label for="idea">Your Idea / Message</label><span class="error-message">Message is required.</span></div>
-
                     <div class="form-actions">
                         <label for="attachment" class="file-upload-label"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span>Attach a document (Optional)</span></label>
                         <input type="file" id="attachment" name="attachment" class="file-upload-input">
-
                         <button type="submit" class="cta-button form-submit-btn"><span class="btn-text">Submit Idea</span><span class="btn-spinner"></span></button>
                     </div>
                     <span id="file-name-display"></span>
@@ -129,7 +122,21 @@
 
     <footer class="main-footer">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-address">
+                    <h4>Nigeria Office</h4>
+                    <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
+                </div>
+                <div class="footer-address">
+                    <h4>UK Office</h4>
+                    <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>Get in Touch</h4>
+                    <a href="mailto:support@toshub.com.ng">support@toshub.com.ng</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
                 <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
                 <div class="social-links">
                     <a href="#" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
