@@ -15,6 +15,20 @@
 
 <body>
 
+    <div class="overlay"></div>
+
+    <aside class="mobile-sidebar" id="mobile-sidebar">
+        <button class="close-btn" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="founder.html">Our Founder</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+            <li><a href="index.html#share-idea" class="cta-button mobile-menu-cta">Share Your Idea</a></li>
+        </ul>
+    </aside>
+
     <header class="main-header">
         <div class="container">
             <nav class="main-nav">
@@ -25,7 +39,7 @@
                     <li><a href="index.html#contact">Contact Us</a></li>
                 </ul>
                 <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
-                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="nav-links" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
             </nav>
         </div>
     </header>
@@ -38,54 +52,71 @@
             </div>
         </section>
 
-        <section class="content-section">
-            <div class="container content-narrow">
-                <p class="intro-paragraph">At TOS Hub (The Other Side), we are building the foundation of Nigeria’s Silicon Valley — a space where ideas are transformed into real businesses, where entrepreneurs are supported to solve problems with technology, and where opportunity
-                    is accessible to all.</p>
-                <p>Nigeria is full of brilliant, resilient, and creative people. What often holds us back is not talent, but opportunity. At TOS Hub, our mission is to remove barriers and create pathways — connecting innovators with the tools, mentorship,
-                    capital, and networks they need to succeed.</p>
-            </div>
-        </section>
-
-        <section class="content-section bg-light">
+        <!-- NEW: Intro Section with Image -->
+        <section class="about-intro-section">
             <div class="container">
-                <div class="split-section">
-                    <div class="info-card">
-                        <div class="info-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
-                        <h3>Our Vision</h3>
-                        <p>To unlock Nigeria’s immense potential by creating an ecosystem where entrepreneurs don’t have to leave home to succeed — they can build world-class solutions right here.</p>
+                <div class="about-intro-grid">
+                    <div class="about-intro-text">
+                        <h2>Building the Foundation of Nigeria’s Silicon Valley.</h2>
+                        <p>At TOS Hub (The Other Side), our mission is to remove barriers and create pathways for Africa's brightest minds. We connect innovators with the tools, mentorship, capital, and networks they need to transform brilliant ideas into world-class businesses.</p>
+                        <p>Nigeria is full of resilient and creative talent. We believe that by fostering a supportive ecosystem, we can unlock this immense potential and build the future, right here at home.</p>
                     </div>
-                    <div class="info-card">
-                        <div class="info-card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-1-3 0-4.5 1.5L13 8 5 6l-1.8 1.8c.5 1.5.3 3.2-.8 4.7l-1 1.5 1.5 1 4.7-.8c1.5-.5 3.2-.3 4.7.8L16 11l1.8 1.8c-.5 1.5-.3 3.2.8 4.7l1.5 1-1-1.5-.8 4.7c-.5 1.5-2.2 1.7-3.7.8z"></path></svg></div>
-                        <h3>Our Approach</h3>
-                        <ul>
-                            <li><strong>Incubate:</strong> Provide practical support to shape and test ideas.</li>
-                            <li><strong>Connect:</strong> Link founders with global networks and diaspora expertise.</li>
-                            <li><strong>Fund:</strong> Offer early-stage investment and access to capital.</li>
-                            <li><strong>Scale:</strong> Build companies with real traction, designed for growth.</li>
-                        </ul>
+                    <div class="about-intro-image">
+                        <img src="images/about-us-collaborate.jpg" alt="A team of diverse innovators collaborating around a table.">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="content-section">
+        <!-- NEW: Core Pillars Section with Cards -->
+        <section class="core-pillars-section">
             <div class="container">
-                <div class="section-title-centered">
-                    <h2>Why TOS Hub Matters</h2>
+                <h2>Our Core Pillars</h2>
+                <div class="pillars-grid">
+                    <!-- Pillar 1 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.09 13.59a5 5 0 0 1-9.18 0"></path><path d="M19.5 21a2.5 2.5 0 0 1-5 0"></path><path d="M10 3v4"></path><path d="M14 3v4"></path><path d="M5.5 8.5h13"></path><path d="M8 21h8"></path><path d="M12 3a6 6 0 0 0-6 6v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a6 6 0 0 0-6-6z"></path></svg>
+                        </div>
+                        <h3>Incubate & Innovate</h3>
+                        <p>We provide the practical support, workspace, and expert guidance needed to shape, test, and launch groundbreaking ideas.</p>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </div>
+                        <h3>Connect & Collaborate</h3>
+                        <p>We bridge the gap between local founders, diaspora professionals, and global investors, creating a powerful and diverse support network.</p>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Fund & Fuel Growth</h3>
+                        <p>Through early-stage investment and access to capital, we provide the critical fuel required to scale companies designed for real-world impact.</p>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- RE-STYLED: Why It Matters Section -->
+        <section class="why-matters-section">
+            <div class="container">
+                <h2>Why TOS Hub Matters</h2>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <h4>Africa's Largest Market</h4>
-                        <p>Nigeria is the continent's largest, youngest market—full of opportunities in fintech, health, agriculture, and logistics.</p>
+                        <p>Nigeria is the continent's largest, youngest market—full of opportunities in fintech, health, agriculture, and logistics that we are poised to unlock.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>Unique Ecosystem</h4>
-                        <p>By bridging local innovators with diaspora professionals and global investors, we create a unique support system others cannot replicate.</p>
+                        <h4>A Unique Ecosystem</h4>
+                        <p>Our model creates a support system that others cannot replicate, combining local grit with global expertise for maximum impact.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>Impact & Return</h4>
-                        <p>We balance social impact and financial return — building businesses that change lives and create sustainable economic value.</p>
+                        <h4>Impact and Return</h4>
+                        <p>We are committed to building businesses that not only generate financial returns but also change lives and create sustainable economic value.</p>
                     </div>
                 </div>
             </div>
@@ -104,10 +135,16 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 900 600" width="40" xmlns="http://www.w3.org/2000/svg"><rect fill="#008751" width="900" height="600"/><rect fill="#fff" width="300" height="600" x="300"/></svg>
+                    </div>
                     <h4>Nigeria Office</h4>
                     <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
                 </div>
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 60 30" width="40" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"/></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+                    </div>
                     <h4>UK Office</h4>
                     <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
                 </div>
@@ -128,5 +165,4 @@
     </footer>
     <script src="js/main.js"></script>
 </body>
-
 </html>

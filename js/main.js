@@ -1,26 +1,44 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- Mobile Navigation Toggle ---
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    // --- SLIDE-IN MOBILE SIDEBAR LOGIC ---
+    const navToggle = document.querySelector('.mobile-nav-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const overlay = document.querySelector('.overlay');
+    const closeBtn = document.querySelector('.close-btn');
 
-    if (mobileNavToggle) {
-        mobileNavToggle.addEventListener('click', () => {
-            // This toggles the class on the BODY tag
-            document.body.classList.toggle('nav-open');
+    if (navToggle && mobileSidebar && overlay && closeBtn) {
+        
+        const openMenu = () => {
+            document.body.classList.add('nav-open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            mobileSidebar.setAttribute('aria-hidden', 'false');
+        };
+
+        const closeMenu = () => {
+            document.body.classList.remove('nav-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            mobileSidebar.setAttribute('aria-hidden', 'true');
+        };
+
+        // Event Listeners
+        navToggle.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+
+        // Close menu if a link inside is clicked
+        mobileSidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu with the 'Escape' key for accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.body.classList.contains('nav-open')) {
+                closeMenu();
+            }
         });
     }
 
-    // Close mobile menu when a link is clicked
-    if (navLinks) {
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.body.classList.remove('nav-open');
-            });
-        });
-    }
-
-    // --- Modal Handling ---
+    // --- ALL YOUR OTHER JAVASCRIPT FOR MODALS AND FORMS ---
     const modal = document.getElementById('result-modal');
     const modalCloseBtn = document.getElementById('modal-close-btn');
     const modalIcon = document.getElementById('modal-icon');
@@ -32,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 8V13" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 16.0195V16" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
 
     function showModal(isSuccess, title, message) {
+        if (!modal) return;
         modalIcon.innerHTML = isSuccess ? successIcon : errorIcon;
         modalTitle.textContent = title;
         modalMessage.textContent = message;
@@ -40,13 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function closeModal() {
+        if (!modal) return;
         modal.classList.add('hidden');
         document.body.classList.remove('modal-open');
-        const submitBtn = form.querySelector('.form-submit-btn');
-        if (submitBtn && submitBtn.classList.contains('submitting')) {
-            submitBtn.classList.remove('submitting');
-            submitBtn.disabled = false;
-        }
     }
 
     if (modal) {
@@ -56,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- File Upload Display ---
     const fileInput = document.getElementById('attachment');
     const fileNameDisplay = document.getElementById('file-name-display');
     if (fileInput) {
@@ -65,58 +79,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Live Inline Validation ---
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const ideaInput = document.getElementById('idea');
-
-    const validateEmail = (email) => {
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    };
-
-    const validateField = (field) => {
-        const errorSpan = field.nextElementSibling.nextElementSibling;
-        let isValid = false;
-        if (field.type === 'email') isValid = validateEmail(field.value);
-        else isValid = field.value.trim() !== '';
-        field.classList.toggle('valid', isValid);
-        field.classList.toggle('invalid', !isValid);
-        errorSpan.style.display = isValid ? 'none' : 'block';
-        return isValid;
-    };
-
-    if (nameInput && emailInput && ideaInput) {
-        nameInput.addEventListener('input', () => validateField(nameInput));
-        emailInput.addEventListener('input', () => validateField(emailInput));
-        ideaInput.addEventListener('input', () => validateField(ideaInput));
-    }
-
-    // --- AJAX Form Submission for Formspree ---
     if (form) {
-        form.addEventListener("submit", async function(event) {
+        form.addEventListener("submit", function(event) {
             event.preventDefault();
-            const isNameValid = validateField(nameInput),
-                isEmailValid = validateField(emailInput),
-                isIdeaValid = validateField(ideaInput);
-            if (!isNameValid || !isEmailValid || !isIdeaValid) return;
             const submitBtn = form.querySelector('.form-submit-btn');
             const data = new FormData(form);
+            
             submitBtn.classList.add('submitting');
             submitBtn.disabled = true;
-            try {
-                const response = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
-                if (response.ok) {
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(data).toString(),
+              })
+                .then(() => {
                     form.reset();
                     if (fileNameDisplay) fileNameDisplay.textContent = '';
-                    [nameInput, emailInput, ideaInput].forEach(input => input.classList.remove('valid', 'invalid'));
                     showModal(true, "Success!", "Your idea has been sent. We'll be in touch soon!");
-                } else {
-                    showModal(false, "Submission Failed", "Something went wrong. Please check your details and try again.");
-                }
-            } catch (error) {
-                showModal(false, "Error", "A network error occurred. Please try again later.");
-            }
+                })
+                .catch(() => {
+                    showModal(false, "Error", "A network error occurred. Please try again later.");
+                })
+                .finally(() => {
+                    submitBtn.classList.remove('submitting');
+                    submitBtn.disabled = false;
+                });
         });
     }
 });

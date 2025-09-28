@@ -15,17 +15,34 @@
 
 <body>
 
+    <div class="overlay"></div>
+
+    <aside class="mobile-sidebar" id="mobile-sidebar">
+        <button class="close-btn" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="founder.html">Our Founder</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+            <li><a href="index.html#share-idea" class="cta-button mobile-menu-cta">Share Your Idea</a></li>
+        </ul>
+    </aside>
+
     <header class="main-header">
         <div class="container">
             <nav class="main-nav">
                 <a href="index.html" class="logo"><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"></a>
+                
                 <ul class="nav-links">
                     <li><a href="about.html">About Us</a></li>
                     <li><a href="founder.html">Our Founder</a></li>
                     <li><a href="index.html#contact">Contact Us</a></li>
                 </ul>
+                
                 <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
-                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="nav-links" aria-expanded="false">
+                
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false">
                     <span class="sr-only">Menu</span>
                     <span class="icon-hamburger"></span>
                 </button>
@@ -126,10 +143,16 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 900 600" width="40" xmlns="http://www.w3.org/2000/svg"><rect fill="#008751" width="900" height="600"/><rect fill="#fff" width="300" height="600" x="300"/></svg>
+                    </div>
                     <h4>Nigeria Office</h4>
                     <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
                 </div>
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 60 30" width="40" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"/></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+                    </div>
                     <h4>UK Office</h4>
                     <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
                 </div>

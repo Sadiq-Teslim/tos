@@ -14,6 +14,21 @@
 </head>
 
 <body>
+
+    <div class="overlay"></div>
+
+    <aside class="mobile-sidebar" id="mobile-sidebar">
+        <button class="close-btn" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="founder.html">Our Founder</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+            <li><a href="index.html#share-idea" class="cta-button mobile-menu-cta">Share Your Idea</a></li>
+        </ul>
+    </aside>
+
     <header class="main-header">
         <div class="container">
             <nav class="main-nav">
@@ -24,43 +39,102 @@
                     <li><a href="index.html#contact">Contact Us</a></li>
                 </ul>
                 <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
-                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="nav-links" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
             </nav>
         </div>
     </header>
+    
     <main>
         <section class="page-header">
             <div class="container">
-                <h1>Meet Our Founder</h1>
+                <h1>The Visionary Behind the Hub</h1>
             </div>
         </section>
-        <section class="founder-section">
+
+        <!-- NEW: Founder Intro Card Section -->
+        <section class="founder-intro-section">
             <div class="container">
-                <div class="founder-grid">
-                    <div class="founder-image-container"><img src="images/david-osime.jpg" alt="David Osime, Founder of TOS Hub"></div>
-                    <div class="founder-text-container">
+                <div class="founder-card">
+                    <div class="founder-card-image">
+                        <img src="images/david-osime.jpg" alt="A portrait of David Osime, Founder of TOS Hub.">
+                    </div>
+                    <div class="founder-card-details">
                         <h2>David Osime</h2>
-                        <blockquote class="founder-quote">“The difference between poverty and prosperity is often simply access to opportunity.”<cite>— David Osime</cite></blockquote>
-                        <p>David Osime is the founder and driving force behind TOS Hub. Born and raised in Nigeria, David grew up with a deep understanding of the challenges and opportunities facing young people across the country.</p>
-                        <p>Through the courage and vision of his mother, David’s life took a transformative turn. His family migrated first to Graz, Austria, and later to the UK — experiences that opened doors to education, networks, and opportunities he
-                            may not have had otherwise.</p>
-                        <p>This belief drives David’s work today. His story is not just about leaving Nigeria — it’s about returning with purpose. Having lived, studied, and worked across Europe, he saw firsthand how systems of support empower entrepreneurs
-                            and innovators. Now, he is coming home to Nigeria to replicate those opportunities for others.</p>
-                        <p>For David, Nigeria is not defined by its struggles. It is defined by its immense potential — potential that is waiting to be unlocked by those willing to invest, build, and believe. Through TOS Hub, David is committed to creating
-                            a platform that turns ideas into businesses, problems into solutions, and young dreamers into global entrepreneurs.</p>
+                        <span class="founder-title">Founder & Visionary</span>
+                        <blockquote class="founder-card-quote">
+                            “The difference between poverty and prosperity is often simply access to opportunity.”
+                        </blockquote>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- NEW: The Founder's Journey Section -->
+        <section class="founder-journey-section">
+            <div class="container">
+                <h2>The Journey</h2>
+                <div class="journey-text">
+                    <p>David Osime is the founder and driving force behind TOS Hub. Born and raised in Nigeria, David grew up with a deep understanding of the challenges and opportunities facing young people across the country.</p>
+                    <p>Through the courage and vision of his mother, David’s life took a transformative turn. His family migrated first to Graz, Austria, and later to the UK — experiences that opened doors to education, networks, and opportunities he may not have had otherwise.</p>
+                    <p>This belief drives David’s work today. His story is not just about leaving Nigeria — it’s about returning with purpose. Having lived, studied, and worked across Europe, he saw firsthand how systems of support empower entrepreneurs and innovators. Now, he is coming home to Nigeria to replicate those opportunities for others.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Founder's Vision Section with Cards -->
+        <section class="founder-vision-section">
+            <div class="container">
+                <h2>The Vision for TOS Hub</h2>
+                <div class="vision-grid">
+                    <div class="vision-card">
+                        <div class="vision-icon">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                        </div>
+                        <h3>Unlocking Potential</h3>
+                        <p>To create a platform where Nigerian talent is defined not by its struggles, but by its immense potential waiting to be unleashed.</p>
+                    </div>
+                    <div class="vision-card">
+                        <div class="vision-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12a10 10 0 0 0-9.94 10A10 10 0 0 0 12 12z"></path></svg>
+                        </div>
+                        <h3>Bridging Worlds</h3>
+                        <p>To replicate systems of support seen abroad by connecting local innovators with global networks, expertise, and capital.</p>
+                    </div>
+                    <div class="vision-card">
+                        <div class="vision-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"></path><path d="M15 5.88 14 10h4.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 16.66 22H7v-2.35"></path></svg>
+                        </div>
+                        <h3>Purpose-Driven Innovation</h3>
+                        <p>To build businesses that solve real-world problems—turning young dreamers into global entrepreneurs who create lasting value.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-cta-section">
+            <div class="container">
+                <h2>Join the Mission</h2>
+                <p>David's vision is a collective one. Connect with us to become part of the movement that's building Africa's future.</p>
+                <a href="index.html#share-idea" class="cta-button">Share Your Idea</a>
+            </div>
+        </section>
+
     </main>
+
     <footer class="main-footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 900 600" width="40" xmlns="http://www.w3.org/2000/svg"><rect fill="#008751" width="900" height="600"/><rect fill="#fff" width="300" height="600" x="300"/></svg>
+                    </div>
                     <h4>Nigeria Office</h4>
                     <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
                 </div>
                 <div class="footer-address">
+                    <div class="footer-flag" aria-hidden="true">
+                        <svg viewBox="0 0 60 30" width="40" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"/></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+                    </div>
                     <h4>UK Office</h4>
                     <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
                 </div>
@@ -81,5 +155,4 @@
     </footer>
     <script src="js/main.js"></script>
 </body>
-
 </html>
