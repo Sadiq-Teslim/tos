@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us - TOS Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <style>
+         :root {
+            --primary-blue: #004a8f;
+            --accent-teal: #1fb3a8;
+            --dark-blue-bg: #002d56;
+            --text-color: #333;
+            --white-color: #ffffff;
+            --light-gray: #f8f9fa;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 15px 40px rgba(0, 45, 86, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%);
+            --gradient-overlay: linear-gradient(135deg, rgba(0, 45, 86, 0.95), rgba(31, 179, 168, 0.85));
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Poppins", sans-serif;
+            color: var(--text-color);
+            line-height: 1.7;
+            background-color: var(--white-color);
+            overflow-x: hidden;
+        }
+        
+        body.nav-open {
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .main-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 74, 143, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 45px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: var(--gradient-primary);
+            color: var(--white-color);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-light);
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .mobile-nav-toggle,
+        .mobile-sidebar,
+        .overlay,
+        .close-btn {
+            display: none;
+        }
+        
+        section {
+            padding: 6rem 0;
+        }
+        
+        h1,
+        h2 {
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            margin: 1rem auto 3rem;
+            border-radius: 2px;
+        }
+        
+        .page-header {
+            background: var(--gradient-overlay);
+            color: var(--white-color);
+            text-align: center;
+            padding: 5rem 1rem;
+        }
+        
+        .page-header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            color: var(--white-color);
+        }
+        
+        .page-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 1rem auto 0;
+            font-weight: 300;
+        }
+        
+        .join-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        
+        .join-card {
+            background: var(--white-color);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .join-card h2 {
+            text-align: left;
+        }
+        
+        .join-card h2::after {
+            margin: 1rem 0 2rem;
+        }
+        
+        .join-card p,
+        .join-card ul {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .join-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .join-card li {
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .join-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-teal);
+            font-weight: bold;
+        }
+        
+        .contact-section {
+            background-color: var(--light-gray);
+        }
+        
+        .contact-info {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .contact-info a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 1rem;
+            transition: color 0.3s;
+        }
+        
+        .contact-info a:hover {
+            color: var(--accent-teal);
+        }
+        
+        .main-footer {
+            background: var(--dark-blue-bg);
+            color: #a7c4e1;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-address,
+        .footer-contact {
+            text-align: center;
+        }
+        
+        .footer-address h4,
+        .footer-contact h4 {
+            color: var(--white-color);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-address p,
+        .footer-contact a {
+            color: #a7c4e1;
+            text-decoration: none;
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+        }
+        
+        .social-links a {
+            color: #a7c4e1;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent-teal);
+            transform: translateY(-3px);
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 992px) {
+            .join-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+            .mobile-nav-toggle,
+            .overlay,
+            .mobile-sidebar {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background-color: rgba(0, 25, 50, 0.4);
+                z-index: 1050;
+                opacity: 0;
+                pointer-events: none;
+            }
+            .mobile-sidebar {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: min(80vw, 350px);
+                z-index: 1100;
+                background-color: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(15px);
+                box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+            body.nav-open .overlay {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            body.nav-open .mobile-sidebar {
+                transform: translateX(0);
+            }
+            .close-btn {
+                display: block;
+                position: absolute;
+                top: 1.25rem;
+                right: 1.25rem;
+                background: transparent;
+                border: none;
+                padding: 0.5rem;
+                cursor: pointer;
+                color: var(--primary-blue);
+            }
+            .mobile-sidebar ul {
+                list-style: none;
+                text-align: center;
+                padding: 0;
+            }
+            .mobile-sidebar li {
+                margin: 1.5rem 0;
+            }
+            .mobile-sidebar a {
+                font-size: 1.5rem;
+                font-weight: 600;
+                text-decoration: none;
+                color: var(--primary-blue);
+            }
+            .mobile-nav-toggle {
+                background: transparent;
+                border: 0;
+                cursor: pointer;
+                padding: 0.5rem;
+                z-index: 1200;
+                position: relative;
+                width: 28px;
+                height: 21px;
+            }
+            .icon-hamburger {
+                display: block;
+                position: absolute;
+                height: 3px;
+                width: 100%;
+                background: var(--primary-blue);
+                border-radius: 2px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .icon-hamburger::before,
+            .icon-hamburger::after {
+                content: "";
+                display: block;
+                background: var(--primary-blue);
+                position: absolute;
+                height: 3px;
+                width: 100%;
+            }
+            .icon-hamburger::before {
+                top: -8px;
+            }
+            .icon-hamburger::after {
+                top: 8px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <aside class="mobile-sidebar" id="mobile-sidebar">
+        <button class="close-btn" aria-label="Close menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#contact" class="cta-button mobile-menu-cta">Contact Us</a></li>
+        </ul>
+    </aside>
+
+    <header class="main-header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="index.html" class="logo"><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"></a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+                <a href="#contact" class="cta-button nav-cta">Contact Us</a>
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1 class="animate-on-scroll">Build With Us</h1>
+                <p class="page-subtitle animate-on-scroll" style="transition-delay: 0.2s;">Whether you are a founder with a world-changing idea or an investor seeking disciplined, high-impact opportunities, your journey starts here.</p>
+            </div>
+        </section>
+
+        <section id="join">
+            <div class="container">
+                <div class="join-grid">
+                    <div class="join-card animate-on-scroll">
+                        <h2>For Founders</h2>
+                        <p><strong>Ideas don’t die here. They scale.</strong> At TOS Hub, you don’t just get mentorship. You get real execution support—legal, branding, operations, and business development—everything required to go from concept to company.</p>
+                        <a href="#contact" class="cta-button">Apply as Founder</a>
+                    </div>
+                    <div id="invest" class="join-card animate-on-scroll" style="transition-delay: 0.2s;">
+                        <h2>For Investors</h2>
+                        <p><strong>Your capital deserves discipline.</strong> We are seeking $1M in seed investment to build a robust, self-sustaining ecosystem for African innovation.</p>
+                        <ul>
+                            <li>Equip founders with tools & infrastructure.</li>
+                            <li>Establish our Lagos hub.</li>
+                            <li>Build in-house legal & marketing expertise.</li>
+                            <li>Partner with universities and corporates.</li>
+                            <li>Maintain reserves for Lagos’ unpredictability.</li>
+                        </ul>
+                        <p><strong>Return Model:</strong> Equity in the ventures we incubate. Our incentives are aligned for long-term value creation.</p>
+                        <a href="#contact" class="cta-button">Invest in TOS Hub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="contact-info animate-on-scroll">
+                    <h2>Let's Build Together</h2>
+                    <p>Reach out to discuss your vision or investment goals.</p>
+                    <a href="mailto:davidosime@hotmail.co.uk">📩 davidosime@hotmail.co.uk</a>
+                    <a href="tel:+2349044747305">📞 +234 904 474 7305</a>
+                    <a href="tel:+447449772411">📞 +44 7449 772 411</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-address">
+                    <h4>Nigeria Office</h4>
+                    <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
+                </div>
+                <div class="footer-address">
+                    <h4>UK Office</h4>
+                    <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>Get in Touch</h4><a href="mailto:davidosime@hotmail.co.uk">davidosime@hotmail.co.uk</a></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/tos.hub?igsh=MXR4ZXJ2ZndudXhxdQ%3D%3D&utm_source=qr" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.mobile-nav-toggle');
+            if (navToggle) {
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const overlay = document.querySelector('.overlay');
+                const closeBtn = document.querySelector('.close-btn');
+                const openMenu = () => document.body.classList.add('nav-open');
+                const closeMenu = () => document.body.classList.remove('nav-open');
+                navToggle.addEventListener('click', openMenu);
+                closeBtn.addEventListener('click', closeMenu);
+                overlay.addEventListener('click', closeMenu);
+                mobileSidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+                document.addEventListener('keydown', (e) => e.key === 'Escape' && closeMenu());
+            }
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+
+</html>
