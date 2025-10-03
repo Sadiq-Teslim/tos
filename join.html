@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Us - TOS Hub</title>
+    <title>For Founders & Investors - TOS Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -193,6 +193,7 @@
             border-radius: 15px;
             padding: 3rem;
             box-shadow: var(--shadow-medium);
+            border-top: 4px solid var(--primary-blue);
         }
         
         .join-card h2 {
@@ -228,6 +229,10 @@
             font-weight: bold;
         }
         
+        #investor-card {
+            border-top-color: var(--accent-teal);
+        }
+        
         .contact-section {
             background-color: var(--light-gray);
         }
@@ -238,17 +243,39 @@
             margin: 0 auto;
         }
         
-        .contact-info a {
+        .contact-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .contact-info a.email-link {
             text-decoration: none;
             color: var(--primary-blue);
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
             transition: color 0.3s;
         }
         
-        .contact-info a:hover {
+        .contact-info a.email-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-teal);
+            bottom: -5px;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-info a.email-link:hover {
             color: var(--accent-teal);
+        }
+        
+        .contact-info a.email-link:hover::after {
+            transform: scaleX(1);
         }
         
         .main-footer {
@@ -269,6 +296,11 @@
             text-align: center;
         }
         
+        .footer-flag {
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        
         .footer-address h4,
         .footer-contact h4 {
             color: var(--white-color);
@@ -279,6 +311,11 @@
         .footer-contact a {
             color: #a7c4e1;
             text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-contact a:hover {
+            color: var(--accent-teal);
         }
         
         .footer-bottom {
@@ -431,11 +468,11 @@
 <body>
     <div class="overlay"></div>
     <aside class="mobile-sidebar" id="mobile-sidebar">
-        <button class="close-btn" aria-label="Close menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="close-btn" aria-label="Close menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Us</a></li>
-            <li><a href="#contact" class="cta-button mobile-menu-cta">Contact Us</a></li>
+            <li><a href="index.html#share-idea" class="cta-button mobile-menu-cta">Share Your Idea</a></li>
         </ul>
     </aside>
 
@@ -447,8 +484,8 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About Us</a></li>
                 </ul>
-                <a href="#contact" class="cta-button nav-cta">Contact Us</a>
-                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false"><span class="sr-only">Menu</span><span class="icon-hamburger"></span></button>
+                <a href="index.html#share-idea" class="cta-button nav-cta">Share Your Idea</a>
+                <button class="mobile-nav-toggle" aria-label="Menu" aria-controls="mobile-sidebar" aria-expanded="false"><span class="icon-hamburger"></span></button>
             </nav>
         </div>
     </header>
@@ -456,8 +493,8 @@
     <main>
         <section class="page-header">
             <div class="container">
-                <h1 class="animate-on-scroll">Build With Us</h1>
-                <p class="page-subtitle animate-on-scroll" style="transition-delay: 0.2s;">Whether you are a founder with a world-changing idea or an investor seeking disciplined, high-impact opportunities, your journey starts here.</p>
+                <h1 class="animate-on-scroll is-visible">Build With Us</h1>
+                <p class="page-subtitle animate-on-scroll is-visible" style="transition-delay: 0.2s;">Whether you are a founder with a world-changing idea or an investor seeking disciplined, high-impact opportunities, your journey starts here.</p>
             </div>
         </section>
 
@@ -467,9 +504,9 @@
                     <div class="join-card animate-on-scroll">
                         <h2>For Founders</h2>
                         <p><strong>Ideas don’t die here. They scale.</strong> At TOS Hub, you don’t just get mentorship. You get real execution support—legal, branding, operations, and business development—everything required to go from concept to company.</p>
-                        <a href="#contact" class="cta-button">Apply as Founder</a>
+                        <a href="index.html#share-idea" class="cta-button">Apply as Founder</a>
                     </div>
-                    <div id="invest" class="join-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div id="investor-card" class="join-card animate-on-scroll" style="transition-delay: 0.2s;">
                         <h2>For Investors</h2>
                         <p><strong>Your capital deserves discipline.</strong> We are seeking $1M in seed investment to build a robust, self-sustaining ecosystem for African innovation.</p>
                         <ul>
@@ -490,10 +527,8 @@
             <div class="container">
                 <div class="contact-info animate-on-scroll">
                     <h2>Let's Build Together</h2>
-                    <p>Reach out to discuss your vision or investment goals.</p>
-                    <a href="mailto:davidosime@hotmail.co.uk">📩 davidosime@hotmail.co.uk</a>
-                    <a href="tel:+2349044747305">📞 +234 904 474 7305</a>
-                    <a href="tel:+447449772411">📞 +44 7449 772 411</a>
+                    <p>Reach out to our team to discuss your vision or investment goals.</p>
+                    <a href="mailto:support@toshub.com.ng" class="email-link">support@toshub.com.ng</a>
                 </div>
             </div>
         </section>
@@ -503,15 +538,17 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-address">
+                    <div class="footer-flag"><svg viewBox="0 0 900 600" width="40" xmlns="http://www.w3.org/2000/svg"><rect fill="#008751" width="900" height="600"/><rect fill="#fff" width="300" height="600" x="300"/></svg></div>
                     <h4>Nigeria Office</h4>
                     <p>Freedom Way, Lekki Phase 1<br>Lagos, Nigeria</p>
                 </div>
                 <div class="footer-address">
+                    <div class="footer-flag"><svg viewBox="0 0 60 30" width="40" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"/></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg></div>
                     <h4>UK Office</h4>
                     <p>1 Blanchard Avenue, Hampshire<br>Portsmouth, UK</p>
                 </div>
                 <div class="footer-contact">
-                    <h4>Get in Touch</h4><a href="mailto:davidosime@hotmail.co.uk">davidosime@hotmail.co.uk</a></div>
+                    <h4>Get in Touch</h4><a href="mailto:support@toshub.com.ng">support@toshub.com.ng</a></div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 TOS Hub. All Rights Reserved.</p>
