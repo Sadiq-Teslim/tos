@@ -1141,17 +1141,9 @@
         );
 
         // --- UPDATED Supabase & Form Submission ---
-        const decodeConfig = (value) => window.atob(value);
-        const SUPABASE_URL = decodeConfig(
-          "aHR0cHM6Ly9qbWtycWdudnN4bGVha2FrcXNlZy5zdXBhYmFzZS5jbw=="
-        );
-        const SUPABASE_ANON_KEY = decodeConfig(
-          "ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1wdGEzSnhaMjUyYzNoc1pXRnJZV3R4YzJWbklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTmpRNE1EQTNPVElzSW1WNGNDSTZNakE0TURNM05qYzVNbjAuUWt5TzA4Qmxud0c1YzBLOTVjdnJyb3J5cnlNcTd2XzloREVzYklTSmJzdw=="
-        );
-        const supabase = window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_ANON_KEY
-        );
+        const SUPABASE_URL = "https://jmkrqgnvsxleakakqseg.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impta3JxZ252c3hsZWFrYWtxc2VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MDA3OTIsImV4cCI6MjA4MDM3Njc5Mn0.QkyO08BlnwG5c0K95cvrroryryMq7v_9hDEsbISJbsw";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const form = document.getElementById("hackathon-form");
 
         form.addEventListener("submit", async (event) => {
