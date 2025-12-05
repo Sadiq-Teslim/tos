@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel · TOS Hub Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --tos-blue: #0172b6;
+      --tos-blue-dark: #014a7d;
+      --tos-sky: #55c4ff;
+      --tos-slate: #0f2235;
+      --text-muted: #5b6c82;
+      --page-bg: #f5f7fb;
+      --card-border: #dbe5f4;
+      --card-shadow: 0 25px 45px rgba(1, 114, 182, 0.12);
+      --table-header: linear-gradient(135deg, #0172b6, #55c4ff);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+      background: var(--page-bg);
+      color: var(--tos-slate);
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      background: #fff;
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 6px 20px rgba(5, 25, 48, 0.05);
+      padding: 2.25rem clamp(1.2rem, 4vw, 3rem);
+      text-align: center;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      width: 64px;
+      height: auto;
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--tos-slate);
+      font-weight: 700;
+    }
+
+    .header-description {
+      margin: 1rem auto 0;
+      max-width: 640px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-size: 0.98rem;
+    }
+
+    main {
+      width: min(1100px, 94vw);
+      margin: 2rem auto 4rem;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: clamp(1.75rem, 3vw, 2.5rem);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .panel + .panel {
+      margin-top: 2rem;
+    }
+
+    .panel-subtitle {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .login-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 420px);
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 0 auto;
+    }
+
+    .login-card {
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      background: #fff;
+    }
+
+    .login-card h3 {
+      margin: 0 0 0.75rem;
+      color: var(--tos-slate);
+      font-size: 1.1rem;
+    }
+
+    .login-card p {
+      margin: 0 0 1rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--tos-slate);
+      margin-bottom: 0.35rem;
+    }
+
+    .input-group input,
+    .search-box input {
+      width: 100%;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-group input:focus,
+    .search-box input:focus {
+      border-color: var(--tos-blue);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(1, 114, 182, 0.18);
+    }
+
+    .login-btn {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: var(--tos-blue);
+      color: #fff;
+      font-weight: 600;
+      padding: 0.95rem 1.25rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .login-btn:hover {
+      background: var(--tos-blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .logout-btn-custom {
+      width: auto;
+      padding-inline: 1.5rem;
+      margin-top: 0;
+    }
+
+    .error-message {
+      display: none;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      background: rgba(224, 67, 82, 0.08);
+      border: 1px solid rgba(224, 67, 82, 0.2);
+      color: #ac1020;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .dashboard-shell {
+      display: none;
+    }
+
+    .dashboard-shell.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--tos-slate);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      background: #f8fbff;
+    }
+
+    .stat-card h4 {
+      margin: 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+    }
+
+    .stat-card .value {
+      margin-top: 0.5rem;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--tos-blue-dark);
+    }
+
+    .table-shell {
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .table-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--tos-slate);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .table-actions button {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.65rem 1.3rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #eef4fb;
+      color: var(--tos-slate);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .table-actions button:hover {
+      background: rgba(1, 114, 182, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .search-box {
+      padding: 1.25rem 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    #tableContent {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #tableContent::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    #tableContent::-webkit-scrollbar-thumb {
+      background: rgba(1, 114, 182, 0.4);
+      border-radius: 999px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 760px;
+    }
+
+    thead {
+      background: var(--table-header);
+      color: #fff;
+    }
+
+    th,
+    td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(219, 229, 244, 0.6);
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f8fbff;
+    }
+
+    .team-members {
+      font-size: 0.78rem;
+      line-height: 1.4;
+      color: var(--text-muted);
+    }
+
+    .member-item {
+      margin-bottom: 0.4rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid rgba(219, 229, 244, 0.6);
+    }
+
+    .member-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .loading,
+    .no-data,
+    .error-state {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .no-data span,
+    .error-state span {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--tos-slate);
+    }
+
+    @media (max-width: 720px) {
+      .admin-header {
+        padding: 1.75rem 1.25rem;
+      }
+
+      .brand-link {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .panel {
+        padding: 1.5rem;
+      }
+
+      .table-header,
+      .search-box {
+        padding: 1rem;
+      }
+
+      th,
+      td {
+        padding: 0.65rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        min-width: 640px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <a class="brand-link" href="index.html">
+      <img src="images/TOS-Hub-logo.png" alt="TOS Hub logo" class="brand-logo" />
+      <div class="brand-copy">
+        <h1>Hackathon Admin Panel</h1>
+      </div>
+    </a>
+    <p class="header-description">Sign in to view and export registrations.</p>
+  </header>
+
+  <main>
+    <section class="panel login-box" id="loginScreen">
+      <div class="login-grid">
+        <div class="login-card">
+          <h3>Administrator Access</h3>
+          <p>Enter the password to view all registered teams. Sessions remain active per browser until logout.</p>
+          <div id="loginError" class="error-message"></div>
+          <form id="loginForm">
+            <div class="input-group">
+              <label for="password">Admin password</label>
+              <input id="password" type="password" placeholder="Enter password" required />
+            </div>
+            <button type="submit" class="login-btn">Unlock dashboard</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel dashboard-shell" id="adminDashboard">
+      <div class="panel-header">
+        <div>
+          <p class="panel-subtitle">Live sync</p>
+          <h2>Registrations Overview</h2>
+        </div>
+        <button class="login-btn logout-btn-custom" id="logoutBtn">
+          Logout
+        </button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h4>Total Teams</h4>
+          <div class="value" id="totalTeams">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>Total Participants</h4>
+          <div class="value" id="totalParticipants">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>Latest Registration</h4>
+          <div class="value" id="latestReg">-</div>
+        </div>
+      </div>
+
+      <div class="table-shell">
+        <div class="table-header">
+          <h3>Applicant directory</h3>
+          <div class="table-actions">
+            <button id="refreshBtn" class="refresh-btn">Refresh</button>
+            <button id="exportBtn" class="export-btn">Export CSV</button>
+          </div>
+        </div>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by team, lead, email, idea..." />
+        </div>
+        <div id="tableContent">Loading...</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const supabaseUrl = "https://jmkrqgnvsxleakakqseg.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impta3JxZ252c3hsZWFrYWtxc2VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MDA3OTIsImV4cCI6MjA4MDM3Njc5Mn0.QkyO08BlnwG5c0K95cvrroryryMq7v_9hDEsbISJbsw";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    const ADMIN_PASSWORD = "DavidForTOS";
+    let allRegistrations = [];
+
+    const loginScreen = document.getElementById("loginScreen");
+    const adminDashboard = document.getElementById("adminDashboard");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const searchInput = document.getElementById("searchInput");
+    const tableContent = document.getElementById("tableContent");
+    const totalTeamsEl = document.getElementById("totalTeams");
+    const totalParticipantsEl = document.getElementById("totalParticipants");
+    const latestRegEl = document.getElementById("latestReg");
+
+    if (sessionStorage.getItem("adminAuth") === "true") {
+      showDashboard();
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const password = document.getElementById("password").value;
+      loginError.style.display = "none";
+
+      if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem("adminAuth", "true");
+        showDashboard();
+      } else {
+        loginError.textContent = "Invalid password. Please try again.";
+        loginError.style.display = "block";
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("adminAuth");
+      adminDashboard.classList.remove("active");
+      loginScreen.style.display = "block";
+      loginError.style.display = "none";
+      document.getElementById("password").value = "";
+    });
+
+    function showDashboard() {
+      loginScreen.style.display = "none";
+      adminDashboard.classList.add("active");
+      loadRegistrations();
+    }
+
+    async function loadRegistrations() {
+      tableContent.innerHTML = '<div class="loading">Loading registrations...</div>';
+      try {
+        const { data, error } = await supabase
+          .from("hackathon_registrations")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        allRegistrations = data || [];
+        updateStats();
+        displayRegistrations(allRegistrations);
+      } catch (err) {
+        console.error("Error loading registrations:", err);
+        tableContent.innerHTML = `<div class="error-state">Unable to load data. <span>${err.message ||
+          "Check your connection or try again."}</span></div>`;
+      }
+    }
+
+    function updateStats() {
+      totalTeamsEl.textContent = allRegistrations.length;
+      const participants = allRegistrations.reduce((sum, reg) => sum + 1 + (reg.team_members?.length || 0), 0);
+      totalParticipantsEl.textContent = participants;
+
+      if (allRegistrations.length > 0) {
+        const latest = new Date(allRegistrations[0].created_at);
+        latestRegEl.textContent = latest.toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      } else {
+        latestRegEl.textContent = "-";
+      }
+    }
+
+    function displayRegistrations(registrations) {
+      if (!registrations.length) {
+        tableContent.innerHTML = '<div class="no-data">No registrations yet. Check back later.</div>';
+        return;
+      }
+
+      const rows = registrations
+        .map((reg, index) => {
+          const members = (reg.team_members || [])
+            .map(
+              (member) =>
+                `<div class="member-item"><strong>${member.name}</strong><br>${member.email}<br>${member.phone}${member.linkedin ? `<br>LinkedIn: ${member.linkedin}` : ""}</div>`
+            )
+            .join("");
+
+          const registered = new Date(reg.created_at).toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          return `
+            <tr>
+              <td>${index + 1}</td>
+              <td><strong>${reg.team_name}</strong></td>
+              <td>${reg.contact_name}</td>
+              <td>${reg.contact_email}</td>
+              <td>${reg.contact_phone}</td>
+              <td>${reg.contact_linkedin || "-"}</td>
+              <td>${reg.idea_name}</td>
+              <td class="team-members">${members || "No additional members"}</td>
+              <td>${registered}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      tableContent.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>Lead</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>LinkedIn</th>
+              <th>Idea</th>
+              <th>Members</th>
+              <th>Registered</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+    }
+
+    searchInput.addEventListener("input", (event) => {
+      const term = event.target.value.trim().toLowerCase();
+      if (!term) {
+        displayRegistrations(allRegistrations);
+        return;
+      }
+
+      const filtered = allRegistrations.filter((reg) => {
+        return (
+          reg.team_name.toLowerCase().includes(term) ||
+          reg.contact_name.toLowerCase().includes(term) ||
+          reg.contact_email.toLowerCase().includes(term) ||
+          reg.idea_name.toLowerCase().includes(term) ||
+          reg.contact_phone.includes(term)
+        );
+      });
+
+      displayRegistrations(filtered);
+    });
+
+    refreshBtn.addEventListener("click", () => {
+      loadRegistrations();
+    });
+
+    exportBtn.addEventListener("click", () => {
+      if (!allRegistrations.length) {
+        alert("No data to export");
+        return;
+      }
+
+      let csv = "Team Name,Contact Name,Email,Phone,LinkedIn,Idea,Description,Participants,Timestamp\n";
+      allRegistrations.forEach((reg) => {
+        const members = (reg.team_members || [])
+          .map(
+            (member) => `${member.name} (${member.email}, ${member.phone}${member.linkedin ? `, ${member.linkedin}` : ""})`
+          )
+          .join(" | ");
+        const row = [
+          reg.team_name,
+          reg.contact_name,
+          reg.contact_email,
+          reg.contact_phone,
+          reg.contact_linkedin || "",
+          reg.idea_name,
+          reg.idea_description.replace(/"/g, '""'),
+          members || "None",
+          new Date(reg.created_at).toLocaleString(),
+        ]
+          .map((value) => `"${value}"`)
+          .join(",");
+        csv += row + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `hackathon-registrations-${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
