@@ -41,6 +41,10 @@
             transparent 40%
           ),
           #f6f8fb;
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --reveal-distance: 34px;
+        --glow-duration: 18s;
+        --header-height: 88px;
       }
 
       html {
@@ -60,6 +64,72 @@
         overflow-x: hidden;
       }
 
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes floatPulse {
+        0% {
+          opacity: 0.65;
+          filter: blur(60px);
+        }
+        50% {
+          opacity: 1;
+          filter: blur(40px);
+        }
+        100% {
+          opacity: 0.65;
+          filter: blur(60px);
+        }
+      }
+
+      @keyframes pulseOutline {
+        0% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 18px rgba(31, 179, 168, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0);
+        }
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(var(--reveal-distance));
+        transition: opacity 0.7s var(--ease-spring),
+          transform 0.7s var(--ease-spring);
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .hero-text,
+      .hero-actions {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.9s var(--ease-spring),
+          transform 0.9s var(--ease-spring);
+      }
+
+      body.page-loaded .hero-text,
+      body.page-loaded .hero-actions {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       body.nav-open,
       body.modal-open {
         overflow: hidden;
@@ -76,35 +146,109 @@
 
       .main-header {
         background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(12px);
-        padding: 1.4rem 0;
-        border-bottom: 1px solid rgba(0, 74, 143, 0.15);
+        backdrop-filter: blur(14px);
+        padding: 0.95rem 0;
+        border-bottom: 1px solid rgba(0, 74, 143, 0.12);
         position: sticky;
         top: 0;
         z-index: 1000;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        min-height: var(--header-height);
+        transition: padding 0.35s var(--ease-spring),
+          box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
+      }
+
+      .main-header.is-condensed {
+        padding: 0.45rem 0;
+        box-shadow: 0 12px 30px rgba(10, 22, 45, 0.18);
+      }
+
+      .main-header.is-hidden {
+        transform: translateY(-120%);
       }
 
       .brand-strip {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         gap: 1rem;
-        text-align: center;
+        text-align: left;
+        flex-wrap: wrap;
       }
 
-      .brand-strip img {
-        height: 52px;
+      .logo-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(0, 74, 143, 0.15);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s var(--ease-spring);
+      }
+
+      .logo-chip:hover {
+        transform: translateY(-3px);
+      }
+
+      .logo-chip img {
+        height: 48px;
         width: auto;
         display: block;
       }
 
+      .logo-chip span {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+      }
+
+      .brand-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .brand-eyebrow {
+        font-size: 0.74rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--accent-teal);
+        font-weight: 600;
+      }
+
       .brand-strip h1 {
-        font-size: clamp(1.4rem, 4vw, 2rem);
+        font-size: clamp(1.15rem, 3.4vw, 1.9rem);
         margin: 0;
         color: var(--text-color);
-        letter-spacing: 0.04em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
+      }
+
+      .brand-tagline {
+        font-size: 0.85rem;
+        color: var(--muted-gray);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .main-header.is-condensed .brand-strip h1 {
+        font-size: 1.1rem;
+      }
+
+      .main-header.is-condensed .logo-chip img {
+        height: 42px;
+      }
+
+      .header-cta {
+        padding: 0.65rem 1.6rem;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        animation: pulseOutline 3.5s ease infinite;
       }
 
       .cta-button {
@@ -118,11 +262,37 @@
         text-decoration: none;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         box-shadow: var(--shadow-light);
+        position: relative;
+        overflow: hidden;
       }
 
       .cta-button:hover {
         transform: translateY(-3px);
         box-shadow: var(--shadow-hover);
+      }
+
+      .cta-button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.35),
+          transparent 55%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .cta-button:hover::after {
+        opacity: 1;
+      }
+
+      .cta-button:focus-visible {
+        outline: 3px solid rgba(31, 179, 168, 0.6);
+        outline-offset: 4px;
       }
 
       h1,
@@ -139,6 +309,9 @@
       .page-header {
         padding: 6rem 0 5rem;
         background: var(--gradient-overlay);
+        background-size: 200% 200%;
+        animation: gradientShift calc(var(--glow-duration) * 1.2)
+          ease-in-out infinite;
         border-radius: 0;
         margin: 0;
         position: relative;
@@ -211,19 +384,28 @@
         height: 300px;
         border-radius: 50%;
         filter: blur(60px);
-        opacity: 0.3;
+        opacity: 0.35;
+        mix-blend-mode: screen;
+        animation: floatPulse var(--glow-duration) ease-in-out infinite;
+        will-change: transform, opacity;
+        pointer-events: none;
+        transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
+        transition: transform 0.6s var(--ease-spring);
       }
 
       .hero-accents .one {
         background: rgba(31, 179, 168, 0.5);
         top: -80px;
         right: -100px;
+        animation-duration: calc(var(--glow-duration) * 1.4);
       }
 
       .hero-accents .two {
         background: rgba(0, 74, 143, 0.4);
         bottom: -100px;
         left: -60px;
+        animation-duration: calc(var(--glow-duration) * 1.1);
+        animation-delay: 1.5s;
       }
 
       .challenge-section {
@@ -683,11 +865,15 @@
 
       @media (max-width: 960px) {
         .brand-strip {
-          flex-direction: column;
+          gap: 0.75rem;
         }
 
-        .main-nav {
-          flex-wrap: wrap;
+        .brand-copy {
+          max-width: calc(100% - 150px);
+        }
+
+        .header-cta {
+          order: 3;
         }
 
         .hero-actions {
@@ -696,6 +882,38 @@
 
         .challenge-card {
           padding: 2.5rem 2rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .main-header {
+          padding: 0.55rem 0;
+        }
+
+        .brand-strip {
+          flex-wrap: nowrap;
+          justify-content: space-between;
+        }
+
+        .brand-copy {
+          max-width: 100%;
+        }
+
+        .brand-strip h1 {
+          font-size: 1.05rem;
+          letter-spacing: 0.04em;
+        }
+
+        .brand-tagline {
+          font-size: 0.72rem;
+        }
+
+        .header-cta {
+          display: none;
+        }
+
+        .logo-chip img {
+          height: 42px;
         }
       }
 
@@ -751,15 +969,36 @@
           padding: 2rem 1.5rem;
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        .page-header,
+        .hero-accents span,
+        .cta-button,
+        [data-reveal],
+        .main-header {
+          animation: none !important;
+          transition-duration: 0s !important;
+        }
+
+        .hero-accents span {
+          filter: blur(50px);
+        }
+      }
     </style>
   </head>
   <body>
     <header class="main-header">
       <div class="container brand-strip">
-        <a href="index.html" class="logo"
-          ><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"
-        /></a>
-        <h1>TOS Hub Innovation Challenge</h1>
+        <a href="index.html" class="logo-chip" aria-label="TOS Hub Home">
+          <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo" />
+          <span>TOS Hub</span>
+        </a>
+        <div class="brand-copy">
+          <span class="brand-eyebrow">2025 EDITION</span>
+          <h1>TOS Hub Innovation Challenge</h1>
+          <p class="brand-tagline">Build bold SDG solutions</p>
+        </div>
+        <a href="#register" class="cta-button header-cta">Register</a>
       </div>
     </header>
 
@@ -770,7 +1009,7 @@
           <span class="hero-burst two"></span>
         </div>
         <div class="container hero-grid">
-          <div class="hero-text">
+          <div class="hero-text" data-reveal>
             <h1>TOS Hub Innovation Challenge 2025</h1>
             <p class="page-subtitle">
               Build solutions for the UN's Sustainable Development Goals in 24
@@ -785,7 +1024,7 @@
 
       <section class="challenge-section">
         <div class="container">
-          <div class="challenge-card">
+          <div class="challenge-card" data-reveal>
             <div class="challenge-badge">The Challenge</div>
             <h2>Solve a Real-World Problem</h2>
             <p class="challenge-text">
@@ -803,7 +1042,7 @@
         <div class="container">
           <h2>Hackathon Timeline</h2>
           <div class="timeline">
-            <div class="timeline-item left">
+            <div class="timeline-item left" data-reveal>
               <div class="timeline-content">
                 <h3>Registration Period</h3>
                 <p class="timeline-date">
@@ -815,7 +1054,7 @@
                 </p>
               </div>
             </div>
-            <div class="timeline-item right">
+            <div class="timeline-item right" data-reveal>
               <div class="timeline-content">
                 <h3>The 24-Hour Virtual Sprint</h3>
                 <p class="timeline-date">
@@ -828,7 +1067,7 @@
                 </p>
               </div>
             </div>
-            <div class="timeline-item left">
+            <div class="timeline-item left" data-reveal>
               <div class="timeline-content">
                 <h3>Review & Finalist Selection</h3>
                 <p class="timeline-date">
@@ -842,7 +1081,7 @@
                 </p>
               </div>
             </div>
-            <div class="timeline-item right">
+            <div class="timeline-item right" data-reveal>
               <div class="timeline-content">
                 <h3>The Grand Finale: Pitch Day</h3>
                 <p class="timeline-date"><strong>December 22, 2025</strong></p>
@@ -862,7 +1101,7 @@
         <div class="container">
           <h2>What to Expect</h2>
           <div class="info-grid">
-            <div class="info-card">
+            <div class="info-card" data-reveal>
               <h3>Grand Prize</h3>
               <p>
                 <span class="prize-amount">₦500,000</span> for the winning team,
@@ -870,7 +1109,7 @@
                 your idea to life.
               </p>
             </div>
-            <div class="info-card">
+            <div class="info-card" data-reveal>
               <h3>Judging Criteria</h3>
               <p>
                 Solutions will be judged on innovation, real-world impact on the
@@ -878,7 +1117,7 @@
                 pitch.
               </p>
             </div>
-            <div class="info-card">
+            <div class="info-card" data-reveal>
               <h3>The Finale Event</h3>
               <p>
                 After the final pitches, join us for food, networking with
@@ -893,7 +1132,7 @@
       <section id="register" class="hackathon-form-section">
         <div class="container">
           <h2>Register Your Team</h2>
-          <form id="hackathon-form" class="hackathon-form">
+          <form id="hackathon-form" class="hackathon-form" data-reveal>
             <div class="form-group">
               <label for="contact_name">Your Full Name (Team Lead)</label
               ><input type="text" id="contact_name" required />
@@ -946,7 +1185,7 @@
                 addressing?)</label
               ><textarea id="idea_description" rows="5" required></textarea>
             </div>
-            <div class="form-group consent-section">
+            <div class="form-group consent-section" data-reveal>
               <h4 class="consent-heading">Important Acknowledgments</h4>
               <p class="consent-intro">
                 Please confirm the following before submitting:
@@ -972,7 +1211,7 @@
               Submit Registration
             </button>
           </form>
-          <div class="about-hub-card">
+          <div class="about-hub-card" data-reveal>
             <h3>About TOS Hub</h3>
             <p>
               TOS Hub is a builder-first community helping African founders
@@ -996,7 +1235,7 @@
 
     <footer class="main-footer">
       <div class="container">
-        <div class="footer-grid">
+        <div class="footer-grid" data-reveal>
           <div class="footer-address">
             <div class="footer-flag">
               <svg
@@ -1086,6 +1325,80 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("page-loaded");
+
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+        const header = document.querySelector(".main-header");
+        let lastScrollY = window.scrollY;
+
+        const updateHeaderState = () => {
+          if (!header) {
+            return;
+          }
+
+          if (window.scrollY > 24) {
+            header.classList.add("is-condensed");
+          } else {
+            header.classList.remove("is-condensed");
+          }
+
+          if (window.scrollY > lastScrollY && window.scrollY > 140) {
+            header.classList.add("is-hidden");
+          } else {
+            header.classList.remove("is-hidden");
+          }
+
+          lastScrollY = window.scrollY;
+        };
+
+        window.addEventListener("scroll", updateHeaderState, { passive: true });
+        updateHeaderState();
+
+        const heroAccents = document.querySelectorAll(".hero-accents .hero-burst");
+        if (!prefersReducedMotion.matches && heroAccents.length) {
+          const moveAccents = (event) => {
+            const xFactor = (event.clientX / window.innerWidth - 0.5) * 20;
+            const yFactor = (event.clientY / window.innerHeight - 0.5) * 12;
+            heroAccents.forEach((accent, index) => {
+              const depth = (index + 1) * 5;
+              accent.style.setProperty(
+                "--parallax-x",
+                `${xFactor * depth}px`
+              );
+              accent.style.setProperty(
+                "--parallax-y",
+                `${yFactor * depth}px`
+              );
+            });
+          };
+          window.addEventListener("mousemove", moveAccents);
+        }
+
+        const revealTargets = document.querySelectorAll("[data-reveal]");
+        const supportsIntersectionObserver = "IntersectionObserver" in window;
+        if (prefersReducedMotion.matches || !supportsIntersectionObserver) {
+          revealTargets.forEach((el) => el.classList.add("is-visible"));
+        } else if (revealTargets.length) {
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  revealObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+          );
+
+          revealTargets.forEach((el, index) => {
+            el.style.setProperty("--reveal-delay", `${(index % 6) * 90}ms`);
+            revealObserver.observe(el);
+          });
+        }
+
         const numTeammatesSelect = document.getElementById("num_teammates");
         const teammatesContainer = document.getElementById(
           "teammates-container"
