@@ -66,7 +66,7 @@
       .main-header {
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(12px);
-        padding: 1.2rem 0;
+        padding: 1.4rem 0;
         border-bottom: 1px solid rgba(0, 74, 143, 0.15);
         position: sticky;
         top: 0;
@@ -74,44 +74,26 @@
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
       }
 
-      .main-nav {
+      .brand-strip {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 1.5rem;
-        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 1rem;
+        text-align: center;
       }
 
-      .logo img {
-        height: 45px;
+      .brand-strip img {
+        height: 52px;
         width: auto;
         display: block;
       }
 
-      .nav-links {
-        list-style: none;
-        display: flex;
-        gap: 2rem;
-      }
-
-      .nav-links a {
-        text-decoration: none;
-        font-weight: 500;
+      .brand-strip h1 {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        margin: 0;
         color: var(--text-color);
-        letter-spacing: 0.02em;
-        transition: color 0.3s ease;
-      }
-
-      .nav-links a:hover {
-        color: var(--primary-blue);
-      }
-
-      .mobile-nav-toggle {
-        display: none;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0.5rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
 
       .cta-button {
@@ -132,115 +114,6 @@
         box-shadow: var(--shadow-hover);
       }
 
-      .cta-pill {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--white-color);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        padding: 0.85rem 1.8rem;
-        border-radius: 999px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: border 0.3s ease;
-      }
-
-      .cta-pill:hover {
-        border-color: rgba(255, 255, 255, 1);
-      }
-
-      .overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(3, 6, 18, 0.65);
-        z-index: 1050;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-      }
-
-      .mobile-sidebar {
-        display: none;
-        position: fixed;
-        inset: 0 auto 0 0;
-        width: min(80vw, 320px);
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(12px);
-        padding: 3rem 2rem;
-        box-shadow: -15px 30px 60px rgba(0, 0, 0, 0.2);
-        transform: translateX(100%);
-        transition: transform 0.4s ease;
-        z-index: 1100;
-      }
-
-      .mobile-sidebar ul {
-        list-style: none;
-        padding: 0;
-        margin-top: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.75rem;
-        text-align: left;
-      }
-
-      .mobile-sidebar a {
-        font-size: 1.25rem;
-        font-weight: 600;
-        text-decoration: none;
-        color: var(--primary-blue);
-      }
-
-      .close-btn {
-        display: none;
-        position: absolute;
-        top: 1.25rem;
-        right: 1.25rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: var(--primary-blue);
-        padding: 0.25rem;
-      }
-
-      .icon-hamburger {
-        display: block;
-        position: relative;
-        width: 30px;
-        height: 22px;
-        background: transparent;
-      }
-
-      .icon-hamburger::before,
-      .icon-hamburger::after,
-      .icon-hamburger {
-        border-radius: 4px;
-      }
-
-      .icon-hamburger,
-      .icon-hamburger::before,
-      .icon-hamburger::after {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: var(--primary-blue);
-      }
-
-      .icon-hamburger::before {
-        top: -6px;
-      }
-
-      .icon-hamburger::after {
-        top: 6px;
-      }
-
-      body.nav-open .overlay {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      body.nav-open .mobile-sidebar {
-        transform: translateX(0);
-      }
 
       h1,
       h2,
@@ -539,6 +412,28 @@
         border-top: 1px solid rgba(0, 74, 143, 0.1);
       }
 
+      .about-hub-card {
+        max-width: 820px;
+        margin: 2.5rem auto 0;
+        background: #ffffff;
+        border-radius: 26px;
+        padding: 2rem 2.25rem;
+        text-align: center;
+        border: 1px solid rgba(0, 74, 143, 0.12);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+      }
+
+      .about-hub-card h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary-blue);
+      }
+
+      .about-hub-card p {
+        color: var(--muted-gray);
+        margin: 0 auto 1.25rem;
+        max-width: 560px;
+      }
+
       .form-group {
         margin-bottom: 1.25rem;
       }
@@ -764,12 +659,12 @@
       }
 
       @media (max-width: 960px) {
+          .brand-strip {
+            flex-direction: column;
+          }
+
         .main-nav {
           flex-wrap: wrap;
-        }
-
-        .nav-links {
-          justify-content: center;
         }
 
         .hero-actions {
@@ -782,21 +677,6 @@
       }
 
       @media (max-width: 700px) {
-        .nav-links {
-          display: none;
-        }
-
-        .nav-cta {
-          display: none;
-        }
-
-        .mobile-nav-toggle,
-        .mobile-sidebar,
-        .overlay,
-        .close-btn {
-          display: block;
-        }
-
         .page-header {
           padding: 4rem 0 3rem;
         }
@@ -851,59 +731,12 @@
     </style>
   </head>
   <body>
-    <div class="overlay"></div>
-    <aside class="mobile-sidebar" id="mobile-sidebar">
-      <button class="close-btn" aria-label="Close menu">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="join.html">Join Us</a></li>
-        <li>
-          <a href="index.html#share-idea" class="cta-button mobile-menu-cta"
-            >Share Your Idea</a
-          >
-        </li>
-      </ul>
-    </aside>
-
     <header class="main-header">
-      <div class="container">
-        <nav class="main-nav">
-          <a href="index.html" class="logo"
-            ><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"
-          /></a>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="join.html">For Founders & Investors</a></li>
-          </ul>
-          <a href="index.html#share-idea" class="cta-button nav-cta"
-            >Share Your Idea</a
-          >
-          <button
-            class="mobile-nav-toggle"
-            aria-label="Menu"
-            aria-controls="mobile-sidebar"
-            aria-expanded="false"
-          >
-            <span class="icon-hamburger"></span>
-          </button>
-        </nav>
+      <div class="container brand-strip">
+        <a href="index.html" class="logo"
+          ><img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo"
+        /></a>
+        <h1>TOS Hub Innovation Challenge</h1>
       </div>
     </header>
 
@@ -1050,7 +883,8 @@
               <label for="num_teammates"
                 >How many additional teammates do you have? (Maximum of 3, minimum of 1)</label
               >
-              <select id="num_teammates">
+              <select id="num_teammates" required>
+                <option value="" selected disabled>Select number of teammates</option>
                 <option value="1">1 Teammate</option>
                 <option value="2">2 Teammates</option>
                 <option value="3">3 Teammates</option>
@@ -1088,6 +922,15 @@
               Submit Registration
             </button>
           </form>
+          <div class="about-hub-card">
+            <h3>About TOS Hub</h3>
+            <p>
+              TOS Hub is a builder-first community helping African founders validate, launch, and
+              scale bold solutions. We host programs, labs, and capital partners that keep teams
+              shipping real products.
+            </p>
+            <a href="index.html" class="cta-button">Learn More About TOS Hub</a>
+          </div>
         </div>
       </section>
     </main>
@@ -1193,34 +1036,19 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Mobile Nav
-        const navToggle = document.querySelector(".mobile-nav-toggle");
-        if (navToggle) {
-          const mobileSidebar = document.getElementById("mobile-sidebar");
-          const overlay = document.querySelector(".overlay");
-          const closeBtn = document.querySelector(".close-btn");
-          const openMenu = () => document.body.classList.add("nav-open");
-          const closeMenu = () => document.body.classList.remove("nav-open");
-          navToggle.addEventListener("click", openMenu);
-          closeBtn.addEventListener("click", closeMenu);
-          overlay.addEventListener("click", closeMenu);
-          mobileSidebar
-            .querySelectorAll("a")
-            .forEach((link) => link.addEventListener("click", closeMenu));
-          document.addEventListener(
-            "keydown",
-            (e) => e.key === "Escape" && closeMenu()
-          );
-        }
-
         // Dynamic Teammate Fields
         const numTeammatesSelect = document.getElementById("num_teammates");
         const teammatesContainer = document.getElementById(
           "teammates-container"
         );
-        numTeammatesSelect.addEventListener("change", () => {
-          const count = parseInt(numTeammatesSelect.value);
+        const renderTeammateFields = () => {
+          const value = numTeammatesSelect.value;
           teammatesContainer.innerHTML = "";
+          const count = parseInt(value, 10);
+          if (!value || Number.isNaN(count) || count < 1) {
+            return;
+          }
+
           for (let i = 1; i <= count; i++) {
             const teammateFields = `
                         <div class="form-group">
@@ -1235,7 +1063,9 @@
                         </div>`;
             teammatesContainer.innerHTML += teammateFields;
           }
-        });
+        };
+
+        numTeammatesSelect.addEventListener("change", renderTeammateFields);
 
         // Modal Logic
         const modal = document.getElementById("result-modal");
@@ -1263,8 +1093,10 @@
         );
 
         // --- Supabase & Form Submission ---
-        const SUPABASE_URL = "https://jmkrqgnvsxleakakqseg.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impta3JxZ252c3hsZWFrYWtxc2VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MDA3OTIsImV4cCI6MjA4MDM3Njc5Mn0.QkyO08BlnwG5c0K95cvrroryryMq7v_9hDEsbISJbsw";
+        const decodeConfig = (value) => window.atob(value);
+        const SUPABASE_URL = decodeConfig("aHR0cHM6Ly9qbWtycWdudnN4bGVha2FrcXNlZy5zdXBhYmFzZS5jbw==");
+        const SUPABASE_ANON_KEY = decodeConfig("ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1wdGEzSnhaMjUyYzNoc1pXRnJZV3R4YzJWbklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTmpRNE1EQTNPVElzSW1WNGNDSTZNakE0TURNM05qYzVNbjAuUWt5TzA4Qmxud0c1YzBLOTVjdnJyb3J5cnlNcTd2XzloREVzYklTSmJzdw==");
+        const EDGE_FUNCTION = decodeConfig("c2VuZC1yZWdpc3RyYXRpb24tZW1haWw=");
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Form validation helper
@@ -1352,6 +1184,14 @@
             });
           }
 
+          if (!team_members.length) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit Registration";
+            showModal(false, "Add Your Teammates", "Please select your teammate count and provide at least one teammate before submitting.");
+            numTeammatesSelect.focus();
+            return;
+          }
+
           try {
             // Check if email already registered
             const { data: existingRegistrations, error: checkError } = await supabase
@@ -1412,7 +1252,7 @@
             // Send confirmation email
             try {
               const { data: emailData, error: emailError } = await supabase.functions.invoke(
-                'send-registration-email',
+                EDGE_FUNCTION,
                 { body: registrationData }
               );
 
