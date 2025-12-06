@@ -156,6 +156,7 @@
         min-height: var(--header-height);
         transition: padding 0.35s var(--ease-spring),
           box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
+        will-change: transform, padding, box-shadow;
       }
 
       .main-header.is-condensed {
@@ -1332,25 +1333,35 @@
         );
         const header = document.querySelector(".main-header");
         let lastScrollY = window.scrollY;
+        const SCROLL_CONDENSE_THRESHOLD = 24;
+        const SCROLL_HIDE_THRESHOLD = 140;
+        const SCROLL_TOLERANCE = 6;
 
         const updateHeaderState = () => {
           if (!header) {
             return;
           }
 
-          if (window.scrollY > 24) {
+          const currentScrollY = window.scrollY;
+
+          if (currentScrollY > SCROLL_CONDENSE_THRESHOLD) {
             header.classList.add("is-condensed");
           } else {
             header.classList.remove("is-condensed");
           }
 
-          if (window.scrollY > lastScrollY && window.scrollY > 140) {
-            header.classList.add("is-hidden");
-          } else {
+          if (currentScrollY <= SCROLL_HIDE_THRESHOLD) {
             header.classList.remove("is-hidden");
+          } else {
+            const delta = currentScrollY - lastScrollY;
+            if (delta > SCROLL_TOLERANCE) {
+              header.classList.add("is-hidden");
+            } else if (delta < -SCROLL_TOLERANCE) {
+              header.classList.remove("is-hidden");
+            }
           }
 
-          lastScrollY = window.scrollY;
+          lastScrollY = currentScrollY;
         };
 
         window.addEventListener("scroll", updateHeaderState, { passive: true });
