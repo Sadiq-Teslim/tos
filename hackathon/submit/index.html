@@ -19,11 +19,16 @@
         --indigo-galaxy: #0b1c38;
         --text-color: #111b2c;
         --muted-gray: #5c6b7d;
+        --light-gray: #e8ecf1;
         --white-color: #ffffff;
         --card-bg: rgba(255, 255, 255, 0.92);
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --field-bg: #fafbfc;
         --shadow-light: 0 15px 30px rgba(0, 0, 0, 0.12);
         --shadow-hover: 0 25px 45px rgba(0, 0, 0, 0.18);
+        --shadow-card: 0 20px 50px rgba(0, 74, 143, 0.12);
         --gradient-primary: linear-gradient(135deg, #004a8f 0%, #1fb3a8 100%);
+        --gradient-accent: linear-gradient(135deg, #1fb3a8 0%, #00d4b8 100%);
         --gradient-overlay: linear-gradient(
           120deg,
           rgba(0, 45, 86, 0.95),
@@ -41,6 +46,7 @@
           ),
           #f6f8fb;
         --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         --reveal-distance: 32px;
         --glow-duration: 18s;
         --header-height: 82px;
@@ -52,11 +58,18 @@
         padding: 0;
       }
 
+      html {
+        overflow-x: hidden;
+        width: 100%;
+      }
+
       body {
         font-family: "Poppins", system-ui, -apple-system, sans-serif;
         color: var(--text-color);
         background: var(--page-bg);
         overflow-x: hidden;
+        width: 100%;
+        min-height: 100vh;
       }
 
       body.modal-open,
@@ -88,6 +101,24 @@
         }
       }
 
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
       [data-reveal] {
         opacity: 0;
         transform: translateY(var(--reveal-distance));
@@ -105,19 +136,19 @@
         position: sticky;
         top: 0;
         z-index: 1200;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid rgba(0, 74, 143, 0.12);
-        padding: 0.85rem 0;
-        min-height: var(--header-height);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 74, 143, 0.1);
+        padding: 1.25rem 0;
+        box-shadow: 0 2px 20px rgba(0, 74, 143, 0.08);
         transition: padding 0.35s var(--ease-spring),
           box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
+        will-change: transform, padding, box-shadow;
       }
 
       .main-header.is-condensed {
-        padding: 0.4rem 0;
-        box-shadow: 0 20px 30px rgba(8, 18, 38, 0.18);
+        padding: 0.75rem 0;
+        box-shadow: 0 4px 30px rgba(0, 74, 143, 0.12);
       }
 
       .main-header.is-hidden {
@@ -125,51 +156,84 @@
       }
 
       .header-inner {
-        width: min(900px, 92vw);
+        width: min(1100px, 92vw);
         margin: 0 auto;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-        text-align: left;
+        justify-content: space-between;
+        gap: 1.5rem;
       }
 
-      .logo-chip {
-        display: inline-flex;
+      .header-brand {
+        display: flex;
         align-items: center;
-        justify-content: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        border: 1px solid rgba(0, 74, 143, 0.15);
-        background: rgba(255, 255, 255, 0.7);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        gap: 1rem;
+        text-decoration: none;
         transition: transform 0.3s var(--ease-spring);
       }
 
+      .header-brand:hover {
+        transform: translateX(4px);
+      }
+
+      .logo-chip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: var(--gradient-primary);
+        box-shadow: 0 8px 24px rgba(31, 179, 168, 0.25);
+        transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .header-brand:hover .logo-chip {
+        transform: scale(1.05);
+        box-shadow: 0 12px 32px rgba(31, 179, 168, 0.35);
+      }
+
       .logo-chip img {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
+        filter: brightness(0) invert(1);
       }
 
       .header-text {
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        gap: 0.25rem;
+      }
+
+      .header-title {
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        font-weight: 700;
         color: var(--indigo-galaxy);
+        letter-spacing: -0.01em;
+        line-height: 1.2;
       }
 
-      .header-line-primary {
-        font-size: clamp(1rem, 3vw, 1.3rem);
-      }
-
-      .header-line-secondary {
-        font-size: clamp(0.9rem, 2.6vw, 1.1rem);
+      .header-subtitle {
+        font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        font-weight: 500;
         color: var(--muted-gray);
+        letter-spacing: 0.01em;
+      }
+
+      .header-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.9rem;
+        background: linear-gradient(135deg, rgba(31, 179, 168, 0.1), rgba(0, 74, 143, 0.1));
+        border: 1px solid rgba(31, 179, 168, 0.25);
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--primary-blue);
+        white-space: nowrap;
       }
 
       .cta-button {
@@ -213,9 +277,10 @@
 
 
       main {
-        width: min(1100px, 92vw);
+        width: 100%;
+        max-width: min(1100px, 92vw);
         margin: 0 auto 4rem;
-        padding-top: 2rem;
+        padding: 2rem clamp(1rem, 4vw, 2rem) 0;
       }
 
       .hero-panel {
@@ -229,6 +294,9 @@
         color: #fff;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 30px 70px rgba(0, 74, 143, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
       }
 
       .hero-panel::after,
@@ -241,6 +309,7 @@
         filter: blur(70px);
         opacity: 0.35;
         pointer-events: none;
+        z-index: 0;
       }
 
       .hero-panel::before {
@@ -259,13 +328,18 @@
         font-size: clamp(2.5rem, 5vw, 3.8rem);
         line-height: 1.15;
         margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
       }
 
       .hero-panel p {
         font-size: 1.1rem;
         color: rgba(255, 255, 255, 0.9);
         max-width: 720px;
+        margin: 0 auto;
         line-height: 1.8;
+        position: relative;
+        z-index: 1;
       }
 
       .submission-form-section {
@@ -273,52 +347,115 @@
       }
 
       .form-wrapper {
-        background: rgba(255, 255, 255, 0.98);
-        border-radius: 28px;
-        padding: clamp(2.5rem, 5vw, 3.5rem);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-        border: 1px solid rgba(0, 74, 143, 0.12);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 32px;
+        padding: clamp(3rem, 5vw, 4rem);
+        box-shadow: 0 30px 80px rgba(0, 74, 143, 0.15),
+                    0 0 0 1px rgba(0, 74, 143, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .form-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
       }
 
       .form-wrapper h2 {
         text-align: center;
-        font-size: clamp(2rem, 4vw, 2.6rem);
+        font-size: clamp(2rem, 4vw, 2.8rem);
         color: var(--indigo-galaxy);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
       }
 
       .form-wrapper p.section-lede {
         text-align: center;
         color: var(--muted-gray);
-        margin-bottom: 2.5rem;
+        margin-bottom: 3rem;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
 
       form {
         display: grid;
-        gap: 1.5rem;
+        gap: 2rem;
+      }
+
+      .form-section {
+        padding: 2rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 74, 143, 0.08);
+        overflow-x: hidden;
+      }
+
+      .form-section-title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--primary-blue);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-section-title::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        background: var(--gradient-accent);
+        border-radius: 4px;
       }
 
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: 0.45rem;
+        gap: 0.5rem;
       }
 
       .form-group label {
         font-weight: 600;
         color: var(--indigo-galaxy);
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .form-group label .required {
+        color: var(--accent-teal);
+        font-size: 1.1rem;
       }
 
       .form-group input,
       .form-group textarea,
       .form-group select {
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 16px;
-        padding: 0.95rem 1.1rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
         font-size: 1rem;
         font-family: inherit;
-        background: #fdfdfd;
-        transition: border 0.2s ease, box-shadow 0.2s ease;
+        background: var(--field-bg);
+        transition: all 0.3s var(--ease-smooth);
+        color: var(--text-color);
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: #a0a8b4;
       }
 
       .form-group input:focus,
@@ -326,7 +463,18 @@
       .form-group select:focus {
         border-color: var(--accent-teal);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(31, 179, 168, 0.15);
+        box-shadow: 0 0 0 4px rgba(31, 179, 168, 0.12);
+        background: var(--white-color);
+        transform: translateY(-1px);
+      }
+
+      .form-group select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235c6b7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 3rem;
       }
 
       .form-group.has-error input,
@@ -336,10 +484,23 @@
         background: rgba(220, 53, 69, 0.05);
       }
 
+      .form-group small {
+        color: var(--muted-gray);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-top: 0.25rem;
+        display: block;
+      }
+
       .error-message {
         color: #dc3545;
         font-size: 0.85rem;
         display: none;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(220, 53, 69, 0.08);
+        border-radius: 8px;
+        border-left: 3px solid #dc3545;
       }
 
       .form-group.has-error .error-message {
@@ -354,29 +515,132 @@
 
       .submit-btn {
         width: 100%;
-        padding: 1.15rem;
-        font-size: 1.05rem;
-        margin-top: 0.5rem;
+        padding: 1.3rem;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        position: relative;
+        overflow: hidden;
+        background: var(--gradient-primary);
+        box-shadow: 0 10px 30px rgba(31, 179, 168, 0.3);
+      }
+
+      .submit-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .submit-btn:hover::before {
+        left: 100%;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(31, 179, 168, 0.4);
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
       }
 
       .guidelines-card {
-        margin-top: 2.5rem;
-        background: var(--card-bg);
+        margin-top: 3rem;
+        background: linear-gradient(135deg, rgba(31, 179, 168, 0.08) 0%, rgba(0, 74, 143, 0.08) 100%);
+        backdrop-filter: blur(10px);
         border-radius: 24px;
-        padding: 2rem;
-        box-shadow: var(--shadow-light);
-        border: 1px solid rgba(0, 74, 143, 0.1);
+        padding: 2.5rem;
+        box-shadow: var(--shadow-card);
+        border: 1px solid rgba(31, 179, 168, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .guidelines-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: var(--gradient-accent);
       }
 
       .guidelines-card h3 {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.25rem;
         color: var(--primary-blue);
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
       .guidelines-card ul {
-        margin: 0.5rem 0 0 1.1rem;
-        color: var(--muted-gray);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .guidelines-card li {
+        color: var(--text-color);
         line-height: 1.7;
+        padding-left: 2rem;
+        position: relative;
+      }
+
+      .guidelines-card li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 24px;
+        height: 24px;
+        background: var(--gradient-accent);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .guidelines-card li strong {
+        color: var(--primary-blue);
+        font-weight: 600;
+      }
+
+      .deadline-notice {
+        margin-top: 1.5rem;
+        padding: 1.25rem;
+        background: rgba(255, 193, 7, 0.15);
+        border-radius: 12px;
+        border-left: 4px solid #ffc107;
+        color: var(--text-color);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .deadline-notice::before {
+        content: "⚠️";
+        font-size: 1.5rem;
       }
 
       .modal-overlay {
@@ -413,21 +677,207 @@
       }
 
       @media (max-width: 720px) {
+        .main-header {
+          padding: 1rem 0;
+        }
+
         .header-inner {
           flex-direction: column;
           align-items: center;
+          gap: 1rem;
+          width: 100%;
+          padding: 0 1rem;
+        }
+
+        .header-brand {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.75rem;
+        }
+
+        .header-brand:hover {
+          transform: none;
+        }
+
+        .header-text {
+          align-items: center;
+        }
+
+        .logo-chip {
+          width: 52px;
+          height: 52px;
         }
 
         .logo-chip img {
-          height: 42px;
+          width: 32px;
+          height: 32px;
         }
 
         .hero-panel {
-          padding: 2.5rem;
+          padding: 2rem 1.5rem;
+          margin-top: 1.5rem;
+          width: 100%;
+        }
+
+        .hero-panel h1 {
+          font-size: 2rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .hero-panel p {
+          font-size: 1rem;
+        }
+
+        main {
+          padding: 1rem;
+          max-width: 100%;
+        }
+
+        .submission-form-section {
+          width: 100%;
         }
 
         .form-wrapper {
+          padding: 2rem 1rem;
+          border-radius: 24px;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .form-wrapper h2 {
+          font-size: 1.75rem;
+        }
+
+        .form-wrapper p.section-lede {
+          font-size: 0.95rem;
+          margin-bottom: 2rem;
+        }
+
+        .form-section {
+          padding: 1.25rem;
+          border-radius: 16px;
+          width: 100%;
+        }
+
+        .form-section-title {
+          font-size: 1.05rem;
+          word-wrap: break-word;
+        }
+
+        .form-grid-two {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .form-group {
+          width: 100%;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+          padding: 0.85rem 1rem;
+          font-size: 1rem;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .submit-btn {
+          padding: 1.15rem;
+          font-size: 1rem;
+          width: 100%;
+        }
+
+        .guidelines-card {
+          padding: 1.75rem 1.25rem;
+          margin-top: 2rem;
+          width: 100%;
+        }
+
+        .guidelines-card h3 {
+          font-size: 1.25rem;
+        }
+
+        .guidelines-card li {
+          font-size: 0.9rem;
+          padding-left: 1.75rem;
+        }
+
+        .deadline-notice {
+          padding: 1rem;
+          font-size: 0.9rem;
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .modal-box {
+          max-width: 90vw;
           padding: 2rem 1.5rem;
+          margin: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header-badge {
+          font-size: 0.7rem;
+          padding: 0.35rem 0.75rem;
+        }
+
+        .hero-panel {
+          padding: 1.5rem 1.25rem;
+        }
+
+        .hero-panel h1 {
+          font-size: 1.75rem;
+        }
+
+        .form-wrapper {
+          padding: 1.5rem 1rem;
+        }
+
+        .form-section {
+          padding: 1rem;
+        }
+
+        .form-group label {
+          font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+          padding: 0.75rem 0.9rem;
+          font-size: 0.95rem;
+        }
+
+        .form-group small {
+          font-size: 0.8rem;
+        }
+
+        .guidelines-card {
+          padding: 1.5rem 1rem;
+        }
+
+        .guidelines-card li {
+          font-size: 0.85rem;
+        }
+      }
+
+      @media (min-width: 721px) and (max-width: 1024px) {
+        .header-inner {
+          width: 95vw;
+        }
+
+        main {
+          width: 95vw;
+        }
+
+        .form-wrapper {
+          padding: 3rem 2.5rem;
+        }
+
+        .form-grid-two {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -445,17 +895,16 @@
   <body>
     <header class="main-header">
       <div class="header-inner">
-        <a
-          href="../../index.html"
-          class="logo-chip"
-          aria-label="Return to TOS Hub Home"
-        >
-          <img src="../../images/TOS-Hub-logo.png" alt="TOS Hub Logo" />
+        <a href="../../index.html" class="header-brand" aria-label="Return to TOS Hub Home">
+          <div class="logo-chip">
+            <img src="../../images/TOS-Hub-logo.png" alt="TOS Hub" />
+          </div>
+          <div class="header-text">
+            <div class="header-title">TOS Hub Innovation Challenge</div>
+            <div class="header-subtitle">Gen-AI Hackathon 2025</div>
+          </div>
         </a>
-        <div class="header-text">
-          <span class="header-line-primary">TOS Hub · Innovation Challenge</span>
-          <span class="header-line-secondary">Project Submissions Desk</span>
-        </div>
+        <div class="header-badge">Submissions Open</div>
       </div>
     </header>
 
@@ -476,132 +925,153 @@
             Incomplete submissions may be disqualified.
           </p>
           <form id="submission-form">
-            <div class="form-grid-two">
-              <div class="form-group">
-                <label for="team_name">Team Name *</label>
-                <input id="team_name" type="text" placeholder="Your registered team name" required />
+            <!-- Team & Project Identity Section -->
+            <div class="form-section">
+              <h3 class="form-section-title">Team & Project Identity</h3>
+              <div class="form-grid-two">
+                <div class="form-group">
+                  <label for="team_name"><span class="required">*</span> Team Name</label>
+                  <input id="team_name" type="text" placeholder="Your registered team name" required />
+                </div>
+                <div class="form-group">
+                  <label for="project_name"><span class="required">*</span> Project Title</label>
+                  <input id="project_name" type="text" placeholder="E.g., MediLens AI" required />
+                </div>
               </div>
               <div class="form-group">
-                <label for="project_name">Project Title *</label>
-                <input id="project_name" type="text" placeholder="E.g., MediLens AI" required />
+                <label for="tagline"><span class="required">*</span> Project Tagline</label>
+                <input id="tagline" type="text" placeholder="One compelling sentence describing your solution" required />
+              </div>
+              <div class="form-grid-two">
+                <div class="form-group">
+                  <label for="contact_name"><span class="required">*</span> Team Lead Name</label>
+                  <input id="contact_name" type="text" placeholder="Full name" required />
+                </div>
+                <div class="form-group">
+                  <label for="contact_email"><span class="required">*</span> Team Lead Email</label>
+                  <input id="contact_email" type="email" placeholder="email@example.com" required />
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="tagline">Project Tagline *</label>
-              <input id="tagline" type="text" placeholder="One compelling sentence describing your solution" required />
-            </div>
-            <div class="form-grid-two">
+
+            <!-- Project Details Section -->
+            <div class="form-section">
+              <h3 class="form-section-title">Project Details</h3>
               <div class="form-group">
-                <label for="contact_name">Team Lead Name *</label>
-                <input id="contact_name" type="text" required />
+                <label for="selected_sdg"><span class="required">*</span> Selected SDG</label>
+                <select id="selected_sdg" required>
+                  <option value="" disabled selected>Which UN SDG does your project address?</option>
+                  <option value="SDG 1: No Poverty">SDG 1: No Poverty</option>
+                  <option value="SDG 2: Zero Hunger">SDG 2: Zero Hunger</option>
+                  <option value="SDG 3: Good Health and Well-being">SDG 3: Good Health and Well-being</option>
+                  <option value="SDG 4: Quality Education">SDG 4: Quality Education</option>
+                  <option value="SDG 5: Gender Equality">SDG 5: Gender Equality</option>
+                  <option value="SDG 6: Clean Water and Sanitation">SDG 6: Clean Water and Sanitation</option>
+                  <option value="SDG 7: Affordable and Clean Energy">SDG 7: Affordable and Clean Energy</option>
+                  <option value="SDG 8: Decent Work and Economic Growth">SDG 8: Decent Work and Economic Growth</option>
+                  <option value="SDG 9: Industry, Innovation and Infrastructure">SDG 9: Industry, Innovation and Infrastructure</option>
+                  <option value="SDG 10: Reduced Inequality">SDG 10: Reduced Inequality</option>
+                  <option value="SDG 11: Sustainable Cities and Communities">SDG 11: Sustainable Cities and Communities</option>
+                  <option value="SDG 12: Responsible Consumption and Production">SDG 12: Responsible Consumption and Production</option>
+                  <option value="SDG 13: Climate Action">SDG 13: Climate Action</option>
+                  <option value="SDG 14: Life Below Water">SDG 14: Life Below Water</option>
+                  <option value="SDG 15: Life on Land">SDG 15: Life on Land</option>
+                  <option value="SDG 16: Peace and Justice Strong Institutions">SDG 16: Peace and Justice Strong Institutions</option>
+                  <option value="SDG 17: Partnerships to achieve the Goal">SDG 17: Partnerships to achieve the Goal</option>
+                </select>
               </div>
               <div class="form-group">
-                <label for="contact_email">Team Lead Email *</label>
-                <input id="contact_email" type="email" required />
+                <label for="project_description"><span class="required">*</span> Project Description</label>
+                <textarea
+                  id="project_description"
+                  rows="7"
+                  placeholder="Describe the problem, your solution, how Gen-AI was used, and the real-world impact."
+                  required
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="ai_usage_disclosure"><span class="required">*</span> How did you use Generative AI?</label>
+                <textarea
+                  id="ai_usage_disclosure"
+                  rows="4"
+                  placeholder="E.g., Used GPT-4 for medical diagnosis, Claude for legal document generation, Midjourney for UI mockups, GitHub Copilot for code assistance."
+                  required
+                ></textarea>
               </div>
             </div>
-            <div class="form-group">
-              <label for="selected_sdg">Selected SDG *</label>
-              <select id="selected_sdg" required>
-                <option value="" disabled selected>Which UN SDG does your project address?</option>
-                <option value="SDG 1: No Poverty">SDG 1: No Poverty</option>
-                <option value="SDG 2: Zero Hunger">SDG 2: Zero Hunger</option>
-                <option value="SDG 3: Good Health and Well-being">SDG 3: Good Health and Well-being</option>
-                <option value="SDG 4: Quality Education">SDG 4: Quality Education</option>
-                <option value="SDG 5: Gender Equality">SDG 5: Gender Equality</option>
-                <option value="SDG 6: Clean Water and Sanitation">SDG 6: Clean Water and Sanitation</option>
-                <option value="SDG 7: Affordable and Clean Energy">SDG 7: Affordable and Clean Energy</option>
-                <option value="SDG 8: Decent Work and Economic Growth">SDG 8: Decent Work and Economic Growth</option>
-                <option value="SDG 9: Industry, Innovation and Infrastructure">SDG 9: Industry, Innovation and Infrastructure</option>
-                <option value="SDG 10: Reduced Inequality">SDG 10: Reduced Inequality</option>
-                <option value="SDG 11: Sustainable Cities and Communities">SDG 11: Sustainable Cities and Communities</option>
-                <option value="SDG 12: Responsible Consumption and Production">SDG 12: Responsible Consumption and Production</option>
-                <option value="SDG 13: Climate Action">SDG 13: Climate Action</option>
-                <option value="SDG 14: Life Below Water">SDG 14: Life Below Water</option>
-                <option value="SDG 15: Life on Land">SDG 15: Life on Land</option>
-                <option value="SDG 16: Peace and Justice Strong Institutions">SDG 16: Peace and Justice Strong Institutions</option>
-                <option value="SDG 17: Partnerships to achieve the Goal">SDG 17: Partnerships to achieve the Goal</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="project_description">Project Description *</label>
-              <textarea
-                id="project_description"
-                rows="7"
-                placeholder="Describe the problem, your solution, how Gen-AI was used, and the real-world impact."
-                required
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="team_members">Team Members *</label>
-              <textarea
-                id="team_members"
-                rows="4"
-                placeholder="List all team members (2-4 people). Format: Name - Role (e.g., John Doe - Frontend Dev)"
-                required
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="tech_stack">Tech Stack Used *</label>
-              <textarea
-                id="tech_stack"
-                rows="3"
-                placeholder="E.g., OpenAI GPT-4, Python, React, Langchain, Firebase, etc."
-                required
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="github_repo_url">GitHub Repository URL *</label>
-              <input
-                id="github_repo_url"
-                type="url"
-                placeholder="https://github.com/your-team/project (must be public)"
-                required
-              />
-              <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Your README must include: project description, installation steps, and team member list.</small>
-            </div>
-            <div class="form-group">
-              <label for="demo_video_url">Demo Video URL *</label>
-              <input
-                id="demo_video_url"
-                type="url"
-                placeholder="https://youtu.be/... or https://loom.com/..."
-                required
-              />
-              <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">2-3 minute video showing your software in action. Use Loom, YouTube, or Google Drive.</small>
-            </div>
-            <div class="form-grid-two">
+
+            <!-- Team Composition & Tech Section -->
+            <div class="form-section">
+              <h3 class="form-section-title">Team & Technology</h3>
               <div class="form-group">
-                <label for="pitch_deck_url">Pitch Deck URL *</label>
+                <label for="team_members"><span class="required">*</span> Team Members</label>
+                <textarea
+                  id="team_members"
+                  rows="4"
+                  placeholder="List all team members (2-4 people). Format: Name - Role (e.g., John Doe - Frontend Dev)"
+                  required
+                ></textarea>
+                <small>Include all 2-4 team members with their roles clearly specified.</small>
+              </div>
+              <div class="form-group">
+                <label for="tech_stack"><span class="required">*</span> Tech Stack Used</label>
+                <textarea
+                  id="tech_stack"
+                  rows="3"
+                  placeholder="E.g., OpenAI GPT-4, Python, React, Langchain, Firebase, etc."
+                  required
+                ></textarea>
+                <small>List all major frameworks, libraries, APIs, and AI models used.</small>
+              </div>
+            </div>
+
+            <!-- Submission Links Section -->
+            <div class="form-section">
+              <h3 class="form-section-title">Submission Links</h3>
+              <div class="form-group">
+                <label for="github_repo_url"><span class="required">*</span> GitHub Repository URL</label>
                 <input
-                  id="pitch_deck_url"
+                  id="github_repo_url"
                   type="url"
-                  placeholder="https://drive.google.com/..."
+                  placeholder="https://github.com/your-team/project (must be public)"
                   required
                 />
-                <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Max 10 slides (PDF). Cover: Problem, Solution, Impact, Business Model, Team.</small>
+                <small>Your README must include: project description, installation steps, and team member list.</small>
               </div>
               <div class="form-group">
-                <label for="live_demo_url">Live Demo URL (Optional)</label>
+                <label for="demo_video_url">Demo Video URL</label>
                 <input
-                  id="live_demo_url"
+                  id="demo_video_url"
                   type="url"
-                  placeholder="https://your-app.vercel.app"
+                  placeholder="https://youtu.be/... or https://loom.com/..."
                 />
-                <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Hosted app link (Vercel, Netlify, etc.) - Highly recommended!</small>
+                <small>2-3 minute video showing your software in action (optional but recommended). Use Loom, YouTube, or Google Drive.</small>
+              </div>
+              <div class="form-grid-two">
+                <div class="form-group">
+                  <label for="pitch_deck_url"><span class="required">*</span> Pitch Deck URL</label>
+                  <input
+                    id="pitch_deck_url"
+                    type="url"
+                    placeholder="https://drive.google.com/..."
+                    required
+                  />
+                  <small>Max 10 slides (PDF). Cover: Problem, Solution, Impact, Business Model, Team.</small>
+                </div>
+                <div class="form-group">
+                  <label for="live_demo_url">Live Demo URL</label>
+                  <input
+                    id="live_demo_url"
+                    type="url"
+                    placeholder="https://your-app.vercel.app"
+                  />
+                  <small>Hosted app link (Vercel, Netlify, etc.) - Highly recommended!</small>
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="ai_usage_disclosure">How did you use Generative AI? *</label>
-              <textarea
-                id="ai_usage_disclosure"
-                rows="4"
-                placeholder="E.g., Used GPT-4 for medical diagnosis, Claude for legal document generation, Midjourney for UI mockups, GitHub Copilot for code assistance."
-                required
-              ></textarea>
-            </div>
+
             <button type="submit" class="cta-button submit-btn">
-              Submit Project
+               Submit Project
             </button>
           </form>
         </div>
@@ -614,11 +1084,10 @@
             <li><strong>GitHub Repo:</strong> Must be public with a detailed README (description, setup, team).</li>
             <li><strong>Live Demo:</strong> Optional but highly recommended (Vercel, Netlify, etc.).</li>
             <li><strong>AI Disclosure:</strong> Explain how you used ChatGPT, Claude, Copilot, or other Gen-AI tools.</li>
-            <li><strong>Deadline:</strong> December 18th, 10:00 AM WAT. Late submissions may be disqualified.</li>
           </ul>
-          <p style="margin-top: 1rem; color: var(--primary-blue); font-weight: 600;">
-            ⚠️ You can resubmit multiple times. Only your latest submission will be reviewed.
-          </p>
+          <div class="deadline-notice">
+            You can resubmit multiple times. Only your latest submission will be reviewed by December 18th, 10:00 AM WAT.
+          </div>
         </div>
       </section>
     </main>
@@ -792,7 +1261,7 @@
             team_members: document.getElementById("team_members").value.trim(),
             tech_stack: document.getElementById("tech_stack").value.trim(),
             github_repo_url: document.getElementById("github_repo_url").value.trim(),
-            demo_video_url: document.getElementById("demo_video_url").value.trim(),
+            demo_video_url: document.getElementById("demo_video_url").value.trim() || null,
             pitch_deck_url: document.getElementById("pitch_deck_url").value.trim(),
             live_demo_url: document.getElementById("live_demo_url").value.trim() || null,
             ai_usage_disclosure: document.getElementById("ai_usage_disclosure").value.trim(),
@@ -800,24 +1269,37 @@
           };
 
           try {
+            // Check for duplicate team name or project name
             const { data: existingSubmissions, error: checkError } =
               await supabase
                 .from("hackathon_submissions")
                 .select("team_name, project_name")
-                .or(`team_name.ilike.${submissionPayload.team_name},project_name.ilike.${submissionPayload.project_name}`);
+                .or(`team_name.eq.${submissionPayload.team_name},project_name.eq.${submissionPayload.project_name}`);
 
             if (checkError) {
               throw new Error("Unable to verify submissions. Please try again.");
             }
 
             if (existingSubmissions && existingSubmissions.length > 0) {
-              showModal(
-                false,
-                "Already Submitted",
-                "We already have a submission with this team or project name. You can still resubmit with adjustments—rename slightly if needed."
+              const emailExists = existingSubmissions.some(
+                (reg) => reg.team_name.toLowerCase() === submissionPayload.team_name.toLowerCase()
               );
+              const projectExists = existingSubmissions.some(
+                (reg) => reg.project_name.toLowerCase() === submissionPayload.project_name.toLowerCase()
+              );
+
+              let errorMsg = "";
+              if (emailExists && projectExists) {
+                errorMsg = "This team name and project name are already registered.";
+              } else if (emailExists) {
+                errorMsg = "This team name is already taken. Please use a different team name.";
+              } else if (projectExists) {
+                errorMsg = "This project name is already taken. Please choose a different name.";
+              }
+
               submitBtn.disabled = false;
-              submitBtn.textContent = "Send Submission";
+              submitBtn.textContent = "🚀 Submit Project";
+              showModal(false, "Already Submitted", errorMsg);
               return;
             }
 
@@ -844,7 +1326,7 @@
             );
           } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = "Send Submission";
+            submitBtn.textContent = "Submit Project";
           }
         });
       });
