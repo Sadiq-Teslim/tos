@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Your Project · TOS Hub Innovation Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../../images/favicon.ico" sizes="any" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      :root {
+        --primary-blue: #004a8f;
+        --accent-teal: #1fb3a8;
+        --indigo-galaxy: #0b1c38;
+        --text-color: #111b2c;
+        --muted-gray: #5c6b7d;
+        --white-color: #ffffff;
+        --card-bg: rgba(255, 255, 255, 0.92);
+        --shadow-light: 0 15px 30px rgba(0, 0, 0, 0.12);
+        --shadow-hover: 0 25px 45px rgba(0, 0, 0, 0.18);
+        --gradient-primary: linear-gradient(135deg, #004a8f 0%, #1fb3a8 100%);
+        --gradient-overlay: linear-gradient(
+          120deg,
+          rgba(0, 45, 86, 0.95),
+          rgba(31, 179, 168, 0.85)
+        );
+        --page-bg: radial-gradient(
+            circle at top right,
+            rgba(31, 179, 168, 0.25),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(0, 74, 143, 0.4) 0%,
+            transparent 40%
+          ),
+          #f6f8fb;
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --reveal-distance: 32px;
+        --glow-duration: 18s;
+        --header-height: 82px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", system-ui, -apple-system, sans-serif;
+        color: var(--text-color);
+        background: var(--page-bg);
+        overflow-x: hidden;
+      }
+
+      body.modal-open,
+      body.nav-open {
+        overflow: hidden;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes pulseOutline {
+        0% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0.35);
+        }
+        70% {
+          box-shadow: 0 0 0 18px rgba(31, 179, 168, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0);
+        }
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(var(--reveal-distance));
+        transition: opacity 0.8s var(--ease-spring),
+          transform 0.8s var(--ease-spring);
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .main-header {
+        position: sticky;
+        top: 0;
+        z-index: 1200;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(0, 74, 143, 0.12);
+        padding: 0.85rem 0;
+        min-height: var(--header-height);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        transition: padding 0.35s var(--ease-spring),
+          box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
+      }
+
+      .main-header.is-condensed {
+        padding: 0.4rem 0;
+        box-shadow: 0 20px 30px rgba(8, 18, 38, 0.18);
+      }
+
+      .main-header.is-hidden {
+        transform: translateY(-120%);
+      }
+
+      .header-inner {
+        width: min(900px, 92vw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+        text-align: left;
+      }
+
+      .logo-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 74, 143, 0.15);
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s var(--ease-spring);
+      }
+
+      .logo-chip img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--indigo-galaxy);
+      }
+
+      .header-line-primary {
+        font-size: clamp(1rem, 3vw, 1.3rem);
+      }
+
+      .header-line-secondary {
+        font-size: clamp(0.9rem, 2.6vw, 1.1rem);
+        color: var(--muted-gray);
+      }
+
+      .cta-button {
+        background: var(--gradient-primary);
+        color: var(--white-color);
+        padding: 0.8rem 1.9rem;
+        border-radius: 999px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: var(--shadow-light);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.35),
+          transparent 55%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .cta-button:hover::after {
+        opacity: 1;
+      }
+
+
+      main {
+        width: min(1100px, 92vw);
+        margin: 0 auto 4rem;
+        padding-top: 2rem;
+      }
+
+      .hero-panel {
+        margin-top: 2.5rem;
+        padding: clamp(3rem, 6vw, 4.5rem);
+        border-radius: 32px;
+        background: var(--gradient-overlay);
+        background-size: 200% 200%;
+        animation: gradientShift calc(var(--glow-duration) * 1.2)
+          ease-in-out infinite;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-panel::after,
+      .hero-panel::before {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      .hero-panel::before {
+        top: -80px;
+        right: -60px;
+        background: rgba(31, 179, 168, 0.6);
+      }
+
+      .hero-panel::after {
+        bottom: -120px;
+        left: -80px;
+        background: rgba(0, 74, 143, 0.5);
+      }
+
+      .hero-panel h1 {
+        font-size: clamp(2.5rem, 5vw, 3.8rem);
+        line-height: 1.15;
+        margin-bottom: 1rem;
+      }
+
+      .hero-panel p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 720px;
+        line-height: 1.8;
+      }
+
+      .submission-form-section {
+        margin-top: 3rem;
+      }
+
+      .form-wrapper {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 28px;
+        padding: clamp(2.5rem, 5vw, 3.5rem);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(0, 74, 143, 0.12);
+      }
+
+      .form-wrapper h2 {
+        text-align: center;
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        color: var(--indigo-galaxy);
+        margin-bottom: 0.75rem;
+      }
+
+      .form-wrapper p.section-lede {
+        text-align: center;
+        color: var(--muted-gray);
+        margin-bottom: 2.5rem;
+      }
+
+      form {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        color: var(--indigo-galaxy);
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 16px;
+        padding: 0.95rem 1.1rem;
+        font-size: 1rem;
+        font-family: inherit;
+        background: #fdfdfd;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: var(--accent-teal);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(31, 179, 168, 0.15);
+      }
+
+      .form-group.has-error input,
+      .form-group.has-error textarea,
+      .form-group.has-error select {
+        border-color: #dc3545;
+        background: rgba(220, 53, 69, 0.05);
+      }
+
+      .error-message {
+        color: #dc3545;
+        font-size: 0.85rem;
+        display: none;
+      }
+
+      .form-group.has-error .error-message {
+        display: block;
+      }
+
+      .form-grid-two {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 1.15rem;
+        font-size: 1.05rem;
+        margin-top: 0.5rem;
+      }
+
+      .guidelines-card {
+        margin-top: 2.5rem;
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: var(--shadow-light);
+        border: 1px solid rgba(0, 74, 143, 0.1);
+      }
+
+      .guidelines-card h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary-blue);
+      }
+
+      .guidelines-card ul {
+        margin: 0.5rem 0 0 1.1rem;
+        color: var(--muted-gray);
+        line-height: 1.7;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 3000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .modal-box {
+        background: var(--white-color);
+        padding: 2.4rem;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 420px;
+        box-shadow: var(--shadow-light);
+      }
+
+      #modal-icon svg {
+        width: 62px;
+        height: 62px;
+        margin-bottom: 1rem;
+      }
+
+      @media (max-width: 720px) {
+        .header-inner {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .logo-chip img {
+          height: 42px;
+        }
+
+        .hero-panel {
+          padding: 2.5rem;
+        }
+
+        .form-wrapper {
+          padding: 2rem 1.5rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .main-header,
+        .hero-panel,
+        .cta-button,
+        [data-reveal] {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-inner">
+        <a
+          href="../../index.html"
+          class="logo-chip"
+          aria-label="Return to TOS Hub Home"
+        >
+          <img src="../../images/TOS-Hub-logo.png" alt="TOS Hub Logo" />
+        </a>
+        <div class="header-text">
+          <span class="header-line-primary">TOS Hub · Innovation Challenge</span>
+          <span class="header-line-secondary">Project Submissions Desk</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-panel" data-reveal>
+        <h1>Submit Your Gen-AI Solution</h1>
+        <p>
+          Upload your final demo video, pitch deck, repository, and documentation so our judges can
+          review your 24-hour build. One submission per team. Deadline: December 18th, 10:00 AM WAT.
+        </p>
+      </section>
+
+      <section class="submission-form-section" id="submit">
+        <div class="form-wrapper" data-reveal>
+          <h2>Official Project Submission</h2>
+          <p class="section-lede">
+            All fields marked with * are required. Ensure your links are public and accessible.
+            Incomplete submissions may be disqualified.
+          </p>
+          <form id="submission-form">
+            <div class="form-grid-two">
+              <div class="form-group">
+                <label for="team_name">Team Name *</label>
+                <input id="team_name" type="text" placeholder="Your registered team name" required />
+              </div>
+              <div class="form-group">
+                <label for="project_name">Project Title *</label>
+                <input id="project_name" type="text" placeholder="E.g., MediLens AI" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="tagline">Project Tagline *</label>
+              <input id="tagline" type="text" placeholder="One compelling sentence describing your solution" required />
+            </div>
+            <div class="form-grid-two">
+              <div class="form-group">
+                <label for="contact_name">Team Lead Name *</label>
+                <input id="contact_name" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="contact_email">Team Lead Email *</label>
+                <input id="contact_email" type="email" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="selected_sdg">Selected SDG *</label>
+              <select id="selected_sdg" required>
+                <option value="" disabled selected>Which UN SDG does your project address?</option>
+                <option value="SDG 1: No Poverty">SDG 1: No Poverty</option>
+                <option value="SDG 2: Zero Hunger">SDG 2: Zero Hunger</option>
+                <option value="SDG 3: Good Health and Well-being">SDG 3: Good Health and Well-being</option>
+                <option value="SDG 4: Quality Education">SDG 4: Quality Education</option>
+                <option value="SDG 5: Gender Equality">SDG 5: Gender Equality</option>
+                <option value="SDG 6: Clean Water and Sanitation">SDG 6: Clean Water and Sanitation</option>
+                <option value="SDG 7: Affordable and Clean Energy">SDG 7: Affordable and Clean Energy</option>
+                <option value="SDG 8: Decent Work and Economic Growth">SDG 8: Decent Work and Economic Growth</option>
+                <option value="SDG 9: Industry, Innovation and Infrastructure">SDG 9: Industry, Innovation and Infrastructure</option>
+                <option value="SDG 10: Reduced Inequality">SDG 10: Reduced Inequality</option>
+                <option value="SDG 11: Sustainable Cities and Communities">SDG 11: Sustainable Cities and Communities</option>
+                <option value="SDG 12: Responsible Consumption and Production">SDG 12: Responsible Consumption and Production</option>
+                <option value="SDG 13: Climate Action">SDG 13: Climate Action</option>
+                <option value="SDG 14: Life Below Water">SDG 14: Life Below Water</option>
+                <option value="SDG 15: Life on Land">SDG 15: Life on Land</option>
+                <option value="SDG 16: Peace and Justice Strong Institutions">SDG 16: Peace and Justice Strong Institutions</option>
+                <option value="SDG 17: Partnerships to achieve the Goal">SDG 17: Partnerships to achieve the Goal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="project_description">Project Description *</label>
+              <textarea
+                id="project_description"
+                rows="7"
+                placeholder="Describe the problem, your solution, how Gen-AI was used, and the real-world impact."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="team_members">Team Members *</label>
+              <textarea
+                id="team_members"
+                rows="4"
+                placeholder="List all team members (2-4 people). Format: Name - Role (e.g., John Doe - Frontend Dev)"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="tech_stack">Tech Stack Used *</label>
+              <textarea
+                id="tech_stack"
+                rows="3"
+                placeholder="E.g., OpenAI GPT-4, Python, React, Langchain, Firebase, etc."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="github_repo_url">GitHub Repository URL *</label>
+              <input
+                id="github_repo_url"
+                type="url"
+                placeholder="https://github.com/your-team/project (must be public)"
+                required
+              />
+              <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Your README must include: project description, installation steps, and team member list.</small>
+            </div>
+            <div class="form-group">
+              <label for="demo_video_url">Demo Video URL *</label>
+              <input
+                id="demo_video_url"
+                type="url"
+                placeholder="https://youtu.be/... or https://loom.com/..."
+                required
+              />
+              <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">2-3 minute video showing your software in action. Use Loom, YouTube, or Google Drive.</small>
+            </div>
+            <div class="form-grid-two">
+              <div class="form-group">
+                <label for="pitch_deck_url">Pitch Deck URL *</label>
+                <input
+                  id="pitch_deck_url"
+                  type="url"
+                  placeholder="https://drive.google.com/..."
+                  required
+                />
+                <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Max 10 slides (PDF). Cover: Problem, Solution, Impact, Business Model, Team.</small>
+              </div>
+              <div class="form-group">
+                <label for="live_demo_url">Live Demo URL (Optional)</label>
+                <input
+                  id="live_demo_url"
+                  type="url"
+                  placeholder="https://your-app.vercel.app"
+                />
+                <small style="color: var(--muted-gray); font-size: 0.85rem; margin-top: 0.25rem; display: block;">Hosted app link (Vercel, Netlify, etc.) - Highly recommended!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="ai_usage_disclosure">How did you use Generative AI? *</label>
+              <textarea
+                id="ai_usage_disclosure"
+                rows="4"
+                placeholder="E.g., Used GPT-4 for medical diagnosis, Claude for legal document generation, Midjourney for UI mockups, GitHub Copilot for code assistance."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="cta-button submit-btn">
+              Submit Project
+            </button>
+          </form>
+        </div>
+
+        <div class="guidelines-card" data-reveal>
+          <h3>✅ Submission Checklist</h3>
+          <ul>
+            <li><strong>Demo Video:</strong> 2-3 minutes showing your solution in action (Loom/YouTube).</li>
+            <li><strong>Pitch Deck:</strong> Maximum 10 slides (PDF format).</li>
+            <li><strong>GitHub Repo:</strong> Must be public with a detailed README (description, setup, team).</li>
+            <li><strong>Live Demo:</strong> Optional but highly recommended (Vercel, Netlify, etc.).</li>
+            <li><strong>AI Disclosure:</strong> Explain how you used ChatGPT, Claude, Copilot, or other Gen-AI tools.</li>
+            <li><strong>Deadline:</strong> December 18th, 10:00 AM WAT. Late submissions may be disqualified.</li>
+          </ul>
+          <p style="margin-top: 1rem; color: var(--primary-blue); font-weight: 600;">
+            ⚠️ You can resubmit multiple times. Only your latest submission will be reviewed.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div id="result-modal" class="modal-overlay hidden" role="dialog">
+      <div class="modal-box">
+        <div id="modal-icon"></div>
+        <h3 id="modal-title"></h3>
+        <p id="modal-message"></p>
+        <button id="modal-close-btn" class="cta-button">Continue</button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("page-loaded");
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+        const header = document.querySelector(".main-header");
+        let lastScrollY = window.scrollY;
+
+        const updateHeaderState = () => {
+          if (!header) return;
+          if (window.scrollY > 24) {
+            header.classList.add("is-condensed");
+          } else {
+            header.classList.remove("is-condensed");
+          }
+
+          if (window.scrollY > lastScrollY && window.scrollY > 140) {
+            header.classList.add("is-hidden");
+          } else {
+            header.classList.remove("is-hidden");
+          }
+          lastScrollY = window.scrollY;
+        };
+
+        window.addEventListener("scroll", updateHeaderState, { passive: true });
+        updateHeaderState();
+
+        const revealTargets = document.querySelectorAll("[data-reveal]");
+        const supportsIntersectionObserver = "IntersectionObserver" in window;
+        if (prefersReducedMotion.matches || !supportsIntersectionObserver) {
+          revealTargets.forEach((el) => el.classList.add("is-visible"));
+        } else if (revealTargets.length) {
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  revealObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+          );
+          revealTargets.forEach((el, index) => {
+            el.style.setProperty("--reveal-delay", `${(index % 6) * 90}ms`);
+            revealObserver.observe(el);
+          });
+        }
+
+        const modal = document.getElementById("result-modal");
+        const modalCloseBtn = document.getElementById("modal-close-btn");
+        const modalIcon = document.getElementById("modal-icon");
+        const modalTitle = document.getElementById("modal-title");
+        const modalMessage = document.getElementById("modal-message");
+        const successIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="#28a745" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7.75 12L10.58 14.83L16.25 9.17" stroke="#28a745" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
+        const errorIcon = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 8V13" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 16.0195V16" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
+
+        const showModal = (isSuccess, title, message) => {
+          modalIcon.innerHTML = isSuccess ? successIcon : errorIcon;
+          modalTitle.textContent = title;
+          modalMessage.textContent = message;
+          modal.classList.remove("hidden");
+          document.body.classList.add("modal-open");
+        };
+
+        const closeModal = () => {
+          modal.classList.add("hidden");
+          document.body.classList.remove("modal-open");
+        };
+
+        modalCloseBtn.addEventListener("click", closeModal);
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) closeModal();
+        });
+
+        const decodeConfig = (value) => window.atob(value);
+        const SUPABASE_URL = decodeConfig(
+          "aHR0cHM6Ly9qbWtycWdudnN4bGVha2FrcXNlZy5zdXBhYmFzZS5jbw=="
+        );
+        const SUPABASE_ANON_KEY = decodeConfig(
+          "ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW1wdGEzSnhaMjUyYzNoc1pXRnJZV3R4YzJWbklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTmpRNE1EQTNPVElzSW1WNGNDSTZNakE0TURNM05qYzVNbjAuUWt5TzA4Qmxud0c1YzBLOTVjdnJyb3J5cnlNcTd2XzloREVzYklTSmJzdw=="
+        );
+        const supabase = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+        const submissionForm = document.getElementById("submission-form");
+
+        const validateField = (field, errorMsg) => {
+          const formGroup = field.closest(".form-group");
+          if (!field.validity.valid || !field.value.trim()) {
+            formGroup.classList.add("has-error");
+            let errorDiv = formGroup.querySelector(".error-message");
+            if (!errorDiv) {
+              errorDiv = document.createElement("div");
+              errorDiv.className = "error-message";
+              field.insertAdjacentElement("afterend", errorDiv);
+            }
+            errorDiv.textContent = errorMsg || field.validationMessage;
+            return false;
+          }
+          formGroup.classList.remove("has-error");
+          return true;
+        };
+
+        submissionForm.querySelectorAll("input, textarea").forEach((field) => {
+          field.addEventListener("blur", () => {
+            if (field.hasAttribute("required")) {
+              validateField(field, "This field is required");
+            }
+          });
+
+          field.addEventListener("input", () => {
+            const group = field.closest(".form-group");
+            if (group && group.classList.contains("has-error")) {
+              validateField(field);
+            }
+          });
+        });
+
+        submissionForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          let isValid = true;
+          submissionForm
+            .querySelectorAll("[required]")
+            .forEach((field) => {
+              if (!validateField(field, "This field is required")) {
+                isValid = false;
+              }
+            });
+          if (!isValid) {
+            showModal(
+              false,
+              "Missing Details",
+              "Please complete every required field before sending."
+            );
+            return;
+          }
+
+          const submitBtn = submissionForm.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+
+          const submissionPayload = {
+            team_name: document.getElementById("team_name").value.trim(),
+            project_name: document.getElementById("project_name").value.trim(),
+            tagline: document.getElementById("tagline").value.trim(),
+            contact_name: document.getElementById("contact_name").value.trim(),
+            contact_email: document
+              .getElementById("contact_email")
+              .value.trim()
+              .toLowerCase(),
+            selected_sdg: document.getElementById("selected_sdg").value.trim(),
+            project_description: document
+              .getElementById("project_description")
+              .value.trim(),
+            team_members: document.getElementById("team_members").value.trim(),
+            tech_stack: document.getElementById("tech_stack").value.trim(),
+            github_repo_url: document.getElementById("github_repo_url").value.trim(),
+            demo_video_url: document.getElementById("demo_video_url").value.trim(),
+            pitch_deck_url: document.getElementById("pitch_deck_url").value.trim(),
+            live_demo_url: document.getElementById("live_demo_url").value.trim() || null,
+            ai_usage_disclosure: document.getElementById("ai_usage_disclosure").value.trim(),
+            created_at: new Date().toISOString(),
+          };
+
+          try {
+            const { data: existingSubmissions, error: checkError } =
+              await supabase
+                .from("hackathon_submissions")
+                .select("team_name, project_name")
+                .or(`team_name.ilike.${submissionPayload.team_name},project_name.ilike.${submissionPayload.project_name}`);
+
+            if (checkError) {
+              throw new Error("Unable to verify submissions. Please try again.");
+            }
+
+            if (existingSubmissions && existingSubmissions.length > 0) {
+              showModal(
+                false,
+                "Already Submitted",
+                "We already have a submission with this team or project name. You can still resubmit with adjustments—rename slightly if needed."
+              );
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send Submission";
+              return;
+            }
+
+            const { error: insertError } = await supabase
+              .from("hackathon_submissions")
+              .insert([submissionPayload]);
+
+            if (insertError) {
+              throw new Error(insertError.message || "Failed to save submission");
+            }
+
+            showModal(
+              true,
+              "Submission Received!",
+              `Thank you, ${submissionPayload.team_name}! Your project "${submissionPayload.project_name}" has been submitted. You'll receive confirmation via email. Good luck!`
+            );
+            submissionForm.reset();
+          } catch (error) {
+            console.error("Submission error", error);
+            showModal(
+              false,
+              "Submission Error",
+              error.message || "Something went wrong while sending your project."
+            );
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send Submission";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
