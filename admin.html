@@ -22,6 +22,10 @@
         --page-bg: #f5f7fb;
         --card-border: #dbe5f4;
         --shadow-light: 0 10px 30px rgba(0, 74, 143, 0.08);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --reveal-distance: 28px;
+        --glow-duration: 16s;
+        --header-height: 84px;
       }
       * {
         box-sizing: border-box;
@@ -33,9 +37,191 @@
         color: var(--text-color);
         min-height: 100vh;
       }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes pulseOutline {
+        0% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0.35);
+        }
+        70% {
+          box-shadow: 0 0 0 18px rgba(31, 179, 168, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(31, 179, 168, 0);
+        }
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(var(--reveal-distance));
+        transition: opacity 0.7s var(--ease-spring),
+          transform 0.7s var(--ease-spring);
+        transition-delay: var(--reveal-delay, 0ms);
+      }
+
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
       main {
         width: min(1400px, 95vw);
         margin: 2rem auto 4rem;
+        padding-top: 1rem;
+      }
+
+      .admin-header {
+        position: sticky;
+        top: 0;
+        z-index: 1200;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(0, 74, 143, 0.12);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        padding: 0.85rem 0;
+        min-height: var(--header-height);
+        transition: padding 0.35s var(--ease-spring),
+          box-shadow 0.35s ease, transform 0.45s var(--ease-spring);
+      }
+
+      .admin-header.is-condensed {
+        padding: 0.4rem 0;
+        box-shadow: 0 18px 32px rgba(10, 22, 45, 0.18);
+      }
+
+      .admin-header.is-hidden {
+        transform: translateY(-120%);
+      }
+
+      .admin-header .header-inner {
+        width: min(1400px, 95vw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .logo-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 74, 143, 0.15);
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.3s var(--ease-spring);
+      }
+
+      .logo-chip img {
+        height: 48px;
+        width: auto;
+        display: block;
+      }
+
+      .logo-chip span {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+      }
+
+      .brand-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .brand-eyebrow {
+        font-size: 0.74rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--accent-teal);
+        font-weight: 600;
+      }
+
+      .brand-title {
+        margin: 0;
+        font-size: clamp(1.2rem, 3.5vw, 1.9rem);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--indigo-galaxy);
+      }
+
+      .brand-tagline {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted-gray);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .admin-header.is-condensed .brand-title {
+        font-size: 1.1rem;
+      }
+
+      .admin-header.is-condensed .logo-chip img {
+        height: 42px;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #004a8f 0%, #1fb3a8 100%);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 0.7rem 1.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: var(--shadow-light);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.35),
+          transparent 55%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.15);
+      }
+
+      .cta-button:hover::after {
+        opacity: 1;
+      }
+
+      .header-cta {
+        white-space: nowrap;
+        animation: pulseOutline 3.5s ease infinite;
       }
       .panel {
         background: #fff;
@@ -289,11 +475,51 @@
         font-size: 1.1rem;
         color: var(--muted-gray);
       }
+
+      @media (max-width: 720px) {
+        .admin-header .header-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .header-cta {
+          width: 100%;
+          text-align: center;
+          animation: none;
+        }
+
+        .logo-chip img {
+          height: 42px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .admin-header,
+        .cta-button,
+        [data-reveal] {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
     </style>
   </head>
   <body>
+    <header class="admin-header" aria-label="TOS Hub Admin Header">
+      <div class="header-inner">
+        <a href="index.html" class="logo-chip" aria-label="TOS Hub Home">
+          <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo" />
+          <span>TOS Hub</span>
+        </a>
+        <div class="brand-copy">
+          <span class="brand-eyebrow">Operations</span>
+          <h1 class="brand-title">TOS Hub Control Room</h1>
+          <p class="brand-tagline">Monitor registrations & submissions</p>
+        </div>
+        <a href="hackathon.html" class="cta-button header-cta">View Event</a>
+      </div>
+    </header>
     <main>
-      <section class="panel" id="loginScreen">
+      <section class="panel" id="loginScreen" data-reveal>
         <div class="login-header">
           <img src="images/TOS-Hub-logo.png" alt="TOS Hub Logo" />
           <h1>Admin Dashboard</h1>
@@ -309,21 +535,21 @@
       </section>
 
       <section class="dashboard-shell" id="adminDashboard">
-        <div class="dashboard-header">
+        <div class="dashboard-header" data-reveal>
           <h1>Dashboard</h1>
           <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
 
-        <nav class="view-switcher">
+        <nav class="view-switcher" data-reveal>
           <button id="viewRegsBtn" class="active">Registrations</button>
           <button id="viewSubsBtn">Project Submissions</button>
         </nav>
 
-        <div class="panel">
-          <div class="stats-grid" id="stats-container">
+        <div class="panel" data-reveal>
+          <div class="stats-grid" id="stats-container" data-reveal>
             <!-- Stats will be loaded here by JS -->
           </div>
-          <div class="table-controls">
+          <div class="table-controls" data-reveal>
             <div class="search-box">
               <input type="text" id="searchInput" placeholder="Search..." />
             </div>
@@ -332,7 +558,7 @@
               <button id="exportBtn">Export CSV</button>
             </div>
           </div>
-          <div class="table-wrapper" id="data-view-container">
+          <div class="table-wrapper" id="data-view-container" data-reveal>
             <!-- Table will be loaded here by JS -->
           </div>
         </div>
@@ -341,6 +567,58 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("page-loaded");
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+        const header = document.querySelector(".admin-header");
+        let lastScrollY = window.scrollY;
+
+        const updateHeaderState = () => {
+          if (!header) {
+            return;
+          }
+          if (window.scrollY > 24) {
+            header.classList.add("is-condensed");
+          } else {
+            header.classList.remove("is-condensed");
+          }
+
+          if (window.scrollY > lastScrollY && window.scrollY > 140) {
+            header.classList.add("is-hidden");
+          } else {
+            header.classList.remove("is-hidden");
+          }
+
+          lastScrollY = window.scrollY;
+        };
+
+        window.addEventListener("scroll", updateHeaderState, { passive: true });
+        updateHeaderState();
+
+        const revealTargets = document.querySelectorAll("[data-reveal]");
+        const supportsIntersectionObserver = "IntersectionObserver" in window;
+        if (prefersReducedMotion.matches || !supportsIntersectionObserver) {
+          revealTargets.forEach((el) => el.classList.add("is-visible"));
+        } else if (revealTargets.length) {
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  revealObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+          );
+
+          revealTargets.forEach((el, index) => {
+            el.style.setProperty("--reveal-delay", `${(index % 5) * 90}ms`);
+            revealObserver.observe(el);
+          });
+        }
+
         const decodeConfig = (value) => window.atob(value);
         const SUPABASE_URL = decodeConfig(
           "aHR0cHM6Ly9qbWtycWdudnN4bGVha2FrcXNlZy5zdXBhYmFzZS5jbw=="
@@ -520,17 +798,24 @@
               }">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
               </button>
-              <br><small>${reg.contact_email}</small><br><small>${
-                reg.contact_phone
-              }</small>
+              <br><small>${reg.contact_email}</small>
+              <br><small>${reg.contact_phone}</small>
+              ${reg.contact_linkedin ? `<br><small><a href="${reg.contact_linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a></small>` : ''}
             </td>
-            <td>${reg.idea_name}</td>
+            <td>${reg.idea_name}<br><small>${reg.idea_description || ''}</small></td>
             <td>
-              <ul>
+              ${(reg.team_members || []).length > 0 ? `<ul>
                 ${(reg.team_members || [])
-                  .map((m) => `<li>${m.name} (${m.email})</li>`)
+                  .map((m) => `<li><strong>${m.name}</strong>
+                    <button class="copy-btn" title="Copy email" data-email="${m.email}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                    <br><small>${m.email}</small>
+                    <br><small>${m.phone || 'N/A'}</small>
+                    ${m.linkedin ? `<br><small><a href="${m.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a></small>` : ''}
+                  </li>`)
                   .join("")}
-              </ul>
+              </ul>` : '<em>No teammates</em>'}
             </td>
             <td>${new Date(reg.created_at).toLocaleString()}</td>
           </tr>
@@ -554,21 +839,28 @@
               (sub) => `
           <tr>
             <td><strong>${sub.team_name}</strong></td>
-            <td>${sub.project_name}</td>
             <td>
-              <a href="${
-                sub.live_demo_url
-              }" target="_blank" rel="noopener noreferrer" class="link-icon" title="Live Demo">🔗</a>
-              <a href="${
-                sub.pitch_deck_url
-              }" target="_blank" rel="noopener noreferrer" class="link-icon" title="Pitch Deck">📄</a>
-              <a href="${
-                sub.github_repo_url
-              }" target="_blank" rel="noopener noreferrer" class="link-icon" title="GitHub Repo">💻</a>
+              <strong>${sub.project_name}</strong>
+              ${sub.tagline ? `<br><small><em>${sub.tagline}</em></small>` : ''}
             </td>
-            <td style="max-width: 400px; white-space: pre-wrap;">${
-              sub.project_description
-            }</td>
+            <td>
+              ${sub.contact_name}
+              <button class="copy-btn" title="Copy email" data-email="${sub.contact_email}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+              <br><small>${sub.contact_email}</small>
+            </td>
+            <td>${sub.selected_sdg || 'N/A'}</td>
+            <td style="max-width: 300px; white-space: pre-wrap;">${sub.project_description}</td>
+            <td style="max-width: 250px; white-space: pre-wrap;">${sub.team_members || 'N/A'}</td>
+            <td style="max-width: 200px; white-space: pre-wrap;">${sub.tech_stack || 'N/A'}</td>
+            <td>
+              ${sub.live_demo_url ? `<a href="${sub.live_demo_url}" target="_blank" rel="noopener noreferrer" class="link-icon" title="Live Demo">🔗</a>` : '<span style="opacity:0.5">—</span>'}
+              ${sub.demo_video_url ? `<a href="${sub.demo_video_url}" target="_blank" rel="noopener noreferrer" class="link-icon" title="Demo Video">🎥</a>` : '<span style="opacity:0.5">—</span>'}
+              ${sub.pitch_deck_url ? `<a href="${sub.pitch_deck_url}" target="_blank" rel="noopener noreferrer" class="link-icon" title="Pitch Deck">📄</a>` : '<span style="opacity:0.5">—</span>'}
+              ${sub.github_repo_url ? `<a href="${sub.github_repo_url}" target="_blank" rel="noopener noreferrer" class="link-icon" title="GitHub Repo">💻</a>` : '<span style="opacity:0.5">—</span>'}
+            </td>
+            <td style="max-width: 300px; white-space: pre-wrap;">${sub.ai_usage_disclosure || 'N/A'}</td>
             <td>${new Date(sub.created_at).toLocaleString()}</td>
           </tr>
         `
@@ -578,7 +870,18 @@
           return `
           <div class="table-wrapper">
             <table>
-              <thead><tr><th>Team Name</th><th>Project Name</th><th>Links</th><th>Description</th><th>Submitted On</th></tr></thead>
+              <thead><tr>
+                <th>Team Name</th>
+                <th>Project Name</th>
+                <th>Contact</th>
+                <th>SDG</th>
+                <th>Description</th>
+                <th>Team Members</th>
+                <th>Tech Stack</th>
+                <th>Links</th>
+                <th>AI Usage</th>
+                <th>Submitted On</th>
+              </tr></thead>
               <tbody>${rows}</tbody>
             </table>
           </div>
@@ -624,16 +927,35 @@
                 "Lead LinkedIn",
                 "Idea",
                 "Description",
-                "Teammates",
+                "Teammate 1 Name",
+                "Teammate 1 Email",
+                "Teammate 1 Phone",
+                "Teammate 1 LinkedIn",
+                "Teammate 2 Name",
+                "Teammate 2 Email",
+                "Teammate 2 Phone",
+                "Teammate 2 LinkedIn",
+                "Teammate 3 Name",
+                "Teammate 3 Email",
+                "Teammate 3 Phone",
+                "Teammate 3 LinkedIn",
                 "Timestamp",
               ]
             : [
                 "Team Name",
                 "Project Name",
-                "Demo URL",
-                "Pitch URL",
-                "Repo URL",
+                "Tagline",
+                "Contact Name",
+                "Contact Email",
+                "SDG",
                 "Description",
+                "Team Members",
+                "Tech Stack",
+                "Live Demo URL",
+                "Demo Video URL",
+                "Pitch Deck URL",
+                "GitHub Repo URL",
+                "AI Usage Disclosure",
                 "Timestamp",
               ];
 
@@ -642,9 +964,7 @@
           data.forEach((item) => {
             let row;
             if (isRegs) {
-              const members = (item.team_members || [])
-                .map((m) => `${m.name} (${m.email})`)
-                .join(" | ");
+              const members = item.team_members || [];
               row = [
                 item.team_name,
                 item.contact_name,
@@ -653,17 +973,36 @@
                 item.contact_linkedin,
                 item.idea_name,
                 item.idea_description,
-                members,
+                members[0]?.name || '',
+                members[0]?.email || '',
+                members[0]?.phone || '',
+                members[0]?.linkedin || '',
+                members[1]?.name || '',
+                members[1]?.email || '',
+                members[1]?.phone || '',
+                members[1]?.linkedin || '',
+                members[2]?.name || '',
+                members[2]?.email || '',
+                members[2]?.phone || '',
+                members[2]?.linkedin || '',
                 new Date(item.created_at).toLocaleString(),
               ];
             } else {
               row = [
                 item.team_name,
                 item.project_name,
+                item.tagline,
+                item.contact_name,
+                item.contact_email,
+                item.selected_sdg,
+                item.project_description,
+                item.team_members,
+                item.tech_stack,
                 item.live_demo_url,
+                item.demo_video_url,
                 item.pitch_deck_url,
                 item.github_repo_url,
-                item.project_description,
+                item.ai_usage_disclosure,
                 new Date(item.created_at).toLocaleString(),
               ];
             }
