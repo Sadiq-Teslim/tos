@@ -291,6 +291,13 @@
         opacity: 1;
       }
 
+      .cta-button.cta-disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.65;
+        box-shadow: none;
+      }
+
       .cta-button:focus-visible {
         outline: 3px solid rgba(31, 179, 168, 0.6);
         outline-offset: 4px;
@@ -607,6 +614,8 @@
         border-radius: 30px;
         box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         border: 1px solid rgba(0, 74, 143, 0.1);
+        position: relative;
+        overflow: hidden;
       }
 
       .hackathon-form-section {
@@ -807,6 +816,46 @@
         width: 64px;
         height: 64px;
         margin-bottom: 1rem;
+      }
+
+      .registration-closed-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s var(--ease-spring);
+        z-index: 2;
+      }
+
+      .registration-closed-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .registration-closed-overlay .overlay-card {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: clamp(2rem, 4vw, 2.75rem);
+        box-shadow: 0 25px 65px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(0, 74, 143, 0.08);
+        max-width: 440px;
+      }
+
+      .registration-closed-overlay h3 {
+        font-size: 1.6rem;
+        color: var(--indigo-galaxy);
+        margin-bottom: 0.75rem;
+      }
+
+      .registration-closed-overlay p {
+        color: var(--muted-gray);
+        line-height: 1.6;
       }
 
       .main-footer {
@@ -1211,6 +1260,18 @@
             <button type="submit" class="cta-button submit-full">
               Submit Registration
             </button>
+
+            <div
+              id="registration-closed-overlay"
+              class="registration-closed-overlay"
+              aria-hidden="true"
+              role="status"
+            >
+              <div class="overlay-card">
+                <h3>Registrations Are Closed</h3>
+                <p>We look forward to seeing you in the next edition.</p>
+              </div>
+            </div>
           </form>
           <div class="about-hub-card" data-reveal>
             <h3>About TOS Hub</h3>
@@ -1481,6 +1542,75 @@
           SUPABASE_ANON_KEY
         );
         const form = document.getElementById("hackathon-form");
+        const submitBtn = form?.querySelector('button[type="submit"]');
+        const registrationOverlay = document.getElementById(
+          "registration-closed-overlay"
+        );
+        const headerCta = document.querySelector(".header-cta");
+        const headerCtaDefaultHref = headerCta?.getAttribute("href") || "#register";
+
+        // Registration close controls
+        const REGISTRATION_CLOSES_AT = new Date("2025-12-16T00:00:00+01:00");
+        const FORCE_CLOSE_REGISTRATION = true; // Toggle to false to reopen early
+
+        const toggleFormInteractivity = (locked) => {
+          if (!form) return;
+          form
+            .querySelectorAll("input, textarea, select")
+            .forEach((field) => {
+              field.disabled = locked;
+            });
+        };
+
+        const applyRegistrationLockState = () => {
+          const locked =
+            FORCE_CLOSE_REGISTRATION ||
+            Date.now() >= REGISTRATION_CLOSES_AT.getTime();
+
+          if (registrationOverlay) {
+            registrationOverlay.classList.toggle("is-visible", locked);
+            registrationOverlay.setAttribute(
+              "aria-hidden",
+              locked ? "false" : "true"
+            );
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = locked;
+            submitBtn.textContent = locked
+              ? "Registration Closed"
+              : "Submit Registration";
+            submitBtn.setAttribute("aria-disabled", locked ? "true" : "false");
+          }
+
+          if (headerCta) {
+            headerCta.textContent = locked
+              ? "Registration Closed"
+              : "Register";
+            headerCta.classList.toggle("cta-disabled", locked);
+            headerCta.setAttribute("aria-disabled", locked ? "true" : "false");
+            if (locked) {
+              headerCta.removeAttribute("href");
+            } else {
+              headerCta.setAttribute("href", headerCtaDefaultHref);
+            }
+          }
+
+          toggleFormInteractivity(locked);
+          form?.setAttribute("aria-disabled", locked ? "true" : "false");
+          return locked;
+        };
+
+        let registrationLocked = applyRegistrationLockState();
+
+        if (!registrationLocked) {
+          const registrationWatcher = setInterval(() => {
+            registrationLocked = applyRegistrationLockState();
+            if (registrationLocked) {
+              clearInterval(registrationWatcher);
+            }
+          }, 60000);
+        }
 
         const validateField = (field, errorMsg) => {
           const formGroup = field.closest(".form-group");
@@ -1523,11 +1653,21 @@
 
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
+          registrationLocked = applyRegistrationLockState();
+          if (registrationLocked) {
+            showModal(
+              false,
+              "Registrations Closed",
+              "Registrations have closed. We look forward to seeing you in the next edition."
+            );
+            return;
+          }
           clearAllErrors();
 
-          const submitBtn = form.querySelector('button[type="submit"]');
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Submitting...";
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Submitting...";
+          }
 
           let isValid = true;
           const requiredFields = form.querySelectorAll("[required]");
@@ -1538,8 +1678,10 @@
           });
 
           if (!isValid) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit Registration";
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Registration";
+            }
             showModal(
               false,
               "Validation Error",
@@ -1634,8 +1776,10 @@
                 errorMsg = "This team name is already taken. Please choose a different name.";
               }
 
-              submitBtn.disabled = false;
-              submitBtn.textContent = "Submit Registration";
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit Registration";
+              }
               showModal(false, "Already Registered", errorMsg);
               return;
             }
@@ -1672,8 +1816,11 @@
               error.message || "There was an error submitting your registration. Please try again."
             );
           } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit Registration";
+            registrationLocked = applyRegistrationLockState();
+            if (!registrationLocked && submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Registration";
+            }
           }
         });
       });
