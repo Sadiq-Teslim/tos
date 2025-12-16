@@ -556,6 +556,7 @@
             <div class="table-actions">
               <button id="refreshBtn">Refresh</button>
               <button id="exportBtn">Export CSV</button>
+              <button id="copyEmailsBtn">Copy Emails</button>
             </div>
           </div>
           <div class="table-wrapper" id="data-view-container" data-reveal>
@@ -652,6 +653,7 @@
         const searchInput = document.getElementById("searchInput");
         const refreshBtn = document.getElementById("refreshBtn");
         const exportBtn = document.getElementById("exportBtn");
+        const copyEmailsBtn = document.getElementById("copyEmailsBtn");
 
         // --- AUTHENTICATION ---
         const checkAuth = () => {
@@ -1028,6 +1030,60 @@
           link.click();
           document.body.removeChild(link);
         });
+
+        if (copyEmailsBtn) {
+          copyEmailsBtn.addEventListener("click", () => {
+            const isRegs = state.currentView === "registrations";
+            const data = isRegs ? state.registrations : state.submissions;
+            if (!data.length) {
+              alert("No emails to copy yet.");
+              return;
+            }
+
+            const emailMap = new Map();
+            const addEmail = (raw) => {
+              const trimmed = (raw || "").trim();
+              if (!trimmed) return;
+              const key = trimmed.toLowerCase();
+              if (!emailMap.has(key)) {
+                emailMap.set(key, trimmed);
+              }
+            };
+
+            data.forEach((item) => {
+              addEmail(item.contact_email);
+              if (isRegs) {
+                (item.team_members || []).forEach((member) =>
+                  addEmail(member.email)
+                );
+              }
+            });
+
+            if (emailMap.size === 0) {
+              alert("No valid email addresses found.");
+              return;
+            }
+
+            const emailsString = Array.from(emailMap.values()).join("; ");
+
+            copyEmailsBtn.disabled = true;
+            const originalText = copyEmailsBtn.textContent;
+            navigator.clipboard
+              .writeText(emailsString)
+              .then(() => {
+                copyEmailsBtn.textContent = "Emails Copied!";
+                setTimeout(() => {
+                  copyEmailsBtn.disabled = false;
+                  copyEmailsBtn.textContent = originalText;
+                }, 1800);
+              })
+              .catch(() => {
+                copyEmailsBtn.disabled = false;
+                copyEmailsBtn.textContent = originalText;
+                alert("Unable to copy emails. Please try again.");
+              });
+          });
+        }
 
         // Initial Load
         checkAuth();
