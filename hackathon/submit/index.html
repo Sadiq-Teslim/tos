@@ -77,6 +77,17 @@
         overflow: hidden;
       }
 
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
       @keyframes gradientShift {
         0% {
           background-position: 0% 50%;
@@ -485,6 +496,67 @@
         background-repeat: no-repeat;
         background-position: right 1rem center;
         padding-right: 3rem;
+      }
+
+      .sdg-multiselect {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.85rem;
+        padding: 1rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 20px;
+        background: var(--field-bg);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .sdg-pill {
+        border: 1px solid rgba(0, 74, 143, 0.12);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 0.85rem 1rem;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 600;
+        color: var(--indigo-galaxy);
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .sdg-pill span {
+        font-size: 0.9rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+      }
+
+      .sdg-pill small {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted-gray);
+      }
+
+      .sdg-pill.is-selected {
+        border-color: rgba(31, 179, 168, 0.6);
+        background: linear-gradient(
+          135deg,
+          rgba(31, 179, 168, 0.15),
+          rgba(0, 74, 143, 0.05)
+        );
+        box-shadow: 0 10px 25px rgba(0, 74, 143, 0.12);
+      }
+
+      .sdg-pill:focus-visible {
+        outline: 3px solid rgba(31, 179, 168, 0.4);
+        outline-offset: 3px;
+      }
+
+      .form-group.has-error .sdg-multiselect {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
       }
 
       .form-group.has-error input,
@@ -1012,9 +1084,21 @@
             <div class="form-section">
               <h3 class="form-section-title">Project Details</h3>
               <div class="form-group">
-                <label for="selected_sdg"><span class="required">*</span> Selected SDG</label>
-                <select id="selected_sdg" required>
-                  <option value="" disabled selected>Which UN SDG does your project address?</option>
+                <label for="selected_sdg"><span class="required">*</span> Selected SDGs</label>
+                <div
+                  class="sdg-multiselect"
+                  data-sdg-options
+                  role="group"
+                  aria-label="Select all Sustainable Development Goals that apply"
+                ></div>
+                <select
+                  id="selected_sdg"
+                  class="sr-only"
+                  multiple
+                  required
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
                   <option value="SDG 1: No Poverty">SDG 1: No Poverty</option>
                   <option value="SDG 2: Zero Hunger">SDG 2: Zero Hunger</option>
                   <option value="SDG 3: Good Health and Well-being">SDG 3: Good Health and Well-being</option>
@@ -1033,6 +1117,7 @@
                   <option value="SDG 16: Peace and Justice Strong Institutions">SDG 16: Peace and Justice Strong Institutions</option>
                   <option value="SDG 17: Partnerships to achieve the Goal">SDG 17: Partnerships to achieve the Goal</option>
                 </select>
+                <small>Choose every SDG your solution advances (minimum of one).</small>
               </div>
               <div class="form-group">
                 <label for="project_description"><span class="required">*</span> Project Description</label>
@@ -1140,7 +1225,7 @@
             <li><strong>AI Disclosure:</strong> Explain how you used ChatGPT, Claude, Copilot, or other Gen-AI tools.</li>
           </ul>
           <div class="deadline-notice">
-            You can resubmit multiple times. Only your latest submission will be reviewed by December 18th, 10:00 AM WAT.
+            You can resubmit multiple times. Only your latest submission will be reviewed by December 19th, 12:00 AM WAT.
           </div>
         </div>
       </section>
@@ -1153,7 +1238,7 @@
       role="status"
     >
       <div class="overlay-card">
-        <h2>Registration Has Closed</h2>
+        <h2>Submissions Are Closed</h2>
         <p>Looking forward to seeing you in the next edition.</p>
       </div>
     </div>
@@ -1255,6 +1340,8 @@
           SUPABASE_ANON_KEY
         );
         const submissionForm = document.getElementById("submission-form");
+        const sdgSelect = document.getElementById("selected_sdg");
+        const sdgOptionsHost = document.querySelector("[data-sdg-options]");
         const submitBtn = submissionForm?.querySelector(".submit-btn");
         const submissionsClosedOverlay = document.getElementById(
           "submissions-closed-overlay"
@@ -1262,7 +1349,7 @@
         const headerBadge = document.querySelector(".header-badge");
 
         // Toggle these values to adjust when submissions close.
-        const SUBMISSION_CLOSES_AT = new Date("2025-12-16T00:00:00+01:00"); // 12:00 AM WAT on Dec 16, 2025
+        const SUBMISSION_CLOSES_AT = new Date("2025-12-18T06:00:00+01:00"); // internal buffer past announced deadline
         const FORCE_CLOSE_SUBMISSIONS = false; // Set to true if you need to lock manually ahead of schedule
 
         const updateSubmitAvailability = (locked) => {
@@ -1325,20 +1412,75 @@
           return true;
         };
 
-        submissionForm.querySelectorAll("input, textarea").forEach((field) => {
-          field.addEventListener("blur", () => {
-            if (field.hasAttribute("required")) {
-              validateField(field, "This field is required");
-            }
+        submissionForm
+          .querySelectorAll("input, textarea, select")
+          .forEach((field) => {
+            field.addEventListener("blur", () => {
+              if (field.hasAttribute("required")) {
+                validateField(field, "This field is required");
+              }
+            });
+
+            field.addEventListener("input", () => {
+              const group = field.closest(".form-group");
+              if (group && group.classList.contains("has-error")) {
+                validateField(field);
+              }
+            });
           });
 
-          field.addEventListener("input", () => {
-            const group = field.closest(".form-group");
-            if (group && group.classList.contains("has-error")) {
-              validateField(field);
-            }
+        const syncSdgPillsFromSelect = () => {
+          if (!sdgSelect || !sdgOptionsHost) return;
+          const selectedValues = new Set(
+            Array.from(sdgSelect.selectedOptions).map((option) => option.value)
+          );
+          sdgOptionsHost.querySelectorAll(".sdg-pill").forEach((pill) => {
+            const isSelected = selectedValues.has(pill.dataset.value);
+            pill.classList.toggle("is-selected", isSelected);
+            pill.setAttribute("aria-pressed", isSelected ? "true" : "false");
+            pill.setAttribute("aria-checked", isSelected ? "true" : "false");
           });
-        });
+        };
+
+        const buildSdgPills = () => {
+          if (!sdgSelect || !sdgOptionsHost) return;
+          sdgOptionsHost.innerHTML = "";
+          Array.from(sdgSelect.options).forEach((option) => {
+            if (!option.value) {
+              option.selected = false;
+              return;
+            }
+
+            const pill = document.createElement("button");
+            pill.type = "button";
+            pill.className = "sdg-pill";
+            pill.dataset.value = option.value;
+            pill.setAttribute("role", "checkbox");
+            pill.setAttribute("aria-pressed", "false");
+            pill.setAttribute("aria-checked", "false");
+
+            const [code, ...rest] = option.textContent.split(":");
+            const sdgCode = (code || option.textContent).trim();
+            const sdgLabel = rest.join(":").trim();
+            pill.innerHTML = `
+              <span>${sdgCode}</span>
+              ${sdgLabel ? `<small>${sdgLabel}</small>` : ""}
+            `;
+
+            pill.addEventListener("click", () => {
+              option.selected = !option.selected;
+              syncSdgPillsFromSelect();
+              sdgSelect.dispatchEvent(new Event("input", { bubbles: true }));
+              sdgSelect.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+
+            sdgOptionsHost.appendChild(pill);
+          });
+          syncSdgPillsFromSelect();
+        };
+
+        buildSdgPills();
+        sdgSelect?.addEventListener("change", syncSdgPillsFromSelect);
 
         submissionForm.addEventListener("submit", async (event) => {
           event.preventDefault();
@@ -1347,7 +1489,7 @@
             showModal(
               false,
               "Submissions Closed",
-              "Registration has closed. Looking forward to seeing you in the next edition."
+              "Submissions have closed. Looking forward to seeing you in the next edition."
             );
             return;
           }
@@ -1374,6 +1516,12 @@
             submitBtn.textContent = "Submitting...";
           }
 
+          const selectedSdgs = sdgSelect
+            ? Array.from(sdgSelect.selectedOptions).map((option) =>
+                option.value.trim()
+              )
+            : [];
+
           const submissionPayload = {
             team_name: document.getElementById("team_name").value.trim(),
             project_name: document.getElementById("project_name").value.trim(),
@@ -1383,7 +1531,7 @@
               .getElementById("contact_email")
               .value.trim()
               .toLowerCase(),
-            selected_sdg: document.getElementById("selected_sdg").value.trim(),
+            selected_sdg: selectedSdgs.join(", "),
             project_description: document
               .getElementById("project_description")
               .value.trim(),
@@ -1448,6 +1596,7 @@
               `Thank you, ${submissionPayload.team_name}! Your project "${submissionPayload.project_name}" has been submitted. You'll receive confirmation via email. Good luck!`
             );
             submissionForm.reset();
+            syncSdgPillsFromSelect();
           } catch (error) {
             console.error("Submission error", error);
             showModal(
