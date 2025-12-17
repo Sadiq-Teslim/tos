@@ -236,6 +236,16 @@
         white-space: nowrap;
       }
 
+      .header-badge.badge-closed {
+        background: linear-gradient(
+          135deg,
+          rgba(220, 53, 69, 0.12),
+          rgba(0, 74, 143, 0.08)
+        );
+        border-color: rgba(220, 53, 69, 0.3);
+        color: #b02035;
+      }
+
       .cta-button {
         background: var(--gradient-primary);
         color: var(--white-color);
@@ -676,6 +686,50 @@
         margin-bottom: 1rem;
       }
 
+      .submission-closed-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.96);
+        z-index: 2500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s var(--ease-smooth);
+      }
+
+      .submission-closed-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .submission-closed-overlay .overlay-card {
+        text-align: center;
+        max-width: 520px;
+        width: min(520px, 100%);
+        background: #ffffff;
+        border-radius: 28px;
+        padding: clamp(2rem, 4vw, 3rem);
+        box-shadow: 0 30px 80px rgba(0, 74, 143, 0.2);
+        border: 1px solid rgba(0, 74, 143, 0.08);
+      }
+
+      .submission-closed-overlay h2 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        margin-bottom: 0.5rem;
+        color: var(--indigo-galaxy);
+      }
+
+      .submission-closed-overlay p {
+        color: var(--muted-gray);
+        font-size: 1rem;
+        line-height: 1.6;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+
       @media (max-width: 720px) {
         .main-header {
           padding: 1rem 0;
@@ -913,7 +967,7 @@
         <h1>Submit Your Gen-AI Solution</h1>
         <p>
           Upload your final demo video, pitch deck, repository, and documentation so our judges can
-          review your 24-hour build. One submission per team. Deadline: December 18th, 10:00 AM WAT.
+          review your 24-hour build. One submission per team. Deadline: December 18th, 12:00 AM WAT.
         </p>
       </section>
 
@@ -1092,6 +1146,18 @@
       </section>
     </main>
 
+    <div
+      id="submissions-closed-overlay"
+      class="submission-closed-overlay"
+      aria-hidden="true"
+      role="status"
+    >
+      <div class="overlay-card">
+        <h2>Registration Has Closed</h2>
+        <p>Looking forward to seeing you in the next edition.</p>
+      </div>
+    </div>
+
     <div id="result-modal" class="modal-overlay hidden" role="dialog">
       <div class="modal-box">
         <div id="modal-icon"></div>
@@ -1189,6 +1255,58 @@
           SUPABASE_ANON_KEY
         );
         const submissionForm = document.getElementById("submission-form");
+        const submitBtn = submissionForm?.querySelector(".submit-btn");
+        const submissionsClosedOverlay = document.getElementById(
+          "submissions-closed-overlay"
+        );
+        const headerBadge = document.querySelector(".header-badge");
+
+        // Toggle these values to adjust when submissions close.
+        const SUBMISSION_CLOSES_AT = new Date("2025-12-16T00:00:00+01:00"); // 12:00 AM WAT on Dec 16, 2025
+        const FORCE_CLOSE_SUBMISSIONS = false; // Set to true if you need to lock manually ahead of schedule
+
+        const updateSubmitAvailability = (locked) => {
+          if (!submitBtn) return;
+          submitBtn.disabled = locked;
+          submitBtn.textContent = locked ? "Submissions Closed" : "Submit Project";
+          submitBtn.setAttribute("aria-disabled", locked ? "true" : "false");
+        };
+
+        const applySubmissionLockState = () => {
+          const locked =
+            FORCE_CLOSE_SUBMISSIONS ||
+            Date.now() >= SUBMISSION_CLOSES_AT.getTime();
+
+          if (submissionsClosedOverlay) {
+            submissionsClosedOverlay.classList.toggle("is-visible", locked);
+            submissionsClosedOverlay.setAttribute(
+              "aria-hidden",
+              locked ? "false" : "true"
+            );
+          }
+
+          if (headerBadge) {
+            headerBadge.textContent = locked
+              ? "Submissions Closed"
+              : "Submissions Open";
+            headerBadge.classList.toggle("badge-closed", locked);
+          }
+
+          updateSubmitAvailability(locked);
+          document.body.classList.toggle("submissions-locked", locked);
+          return locked;
+        };
+
+        let submissionsLocked = applySubmissionLockState();
+
+        if (!submissionsLocked) {
+          const closureWatcher = setInterval(() => {
+            submissionsLocked = applySubmissionLockState();
+            if (submissionsLocked) {
+              clearInterval(closureWatcher);
+            }
+          }, 60000);
+        }
 
         const validateField = (field, errorMsg) => {
           const formGroup = field.closest(".form-group");
@@ -1224,6 +1342,16 @@
 
         submissionForm.addEventListener("submit", async (event) => {
           event.preventDefault();
+          submissionsLocked = applySubmissionLockState();
+          if (submissionsLocked) {
+            showModal(
+              false,
+              "Submissions Closed",
+              "Registration has closed. Looking forward to seeing you in the next edition."
+            );
+            return;
+          }
+
           let isValid = true;
           submissionForm
             .querySelectorAll("[required]")
@@ -1241,9 +1369,10 @@
             return;
           }
 
-          const submitBtn = submissionForm.querySelector('button[type="submit"]');
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Submitting...";
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Submitting...";
+          }
 
           const submissionPayload = {
             team_name: document.getElementById("team_name").value.trim(),
@@ -1297,8 +1426,10 @@
                 errorMsg = "This project name is already taken. Please choose a different name.";
               }
 
-              submitBtn.disabled = false;
-              submitBtn.textContent = "🚀 Submit Project";
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Submit Project";
+              }
               showModal(false, "Already Submitted", errorMsg);
               return;
             }
@@ -1325,8 +1456,11 @@
               error.message || "Something went wrong while sending your project."
             );
           } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit Project";
+            submissionsLocked = applySubmissionLockState();
+            if (!submissionsLocked && submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Project";
+            }
           }
         });
       });
